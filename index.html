@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momin Ahmad | Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">M<span>.</span>AHMAD</a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Home</a></li>
+    <li><a href="#aboutme">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="home" style="padding-top:0;">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Available for projects</div>
+      <h1 class="hero-name">
+        MOMIN<br>
+        <span class="line2">AHMAD</span>
+      </h1>
+      <p class="hero-role">I craft <span class="typed-text"><span class="multiple-text"></span></span></p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-outline">Let's Talk</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Live Projects</div>
+        </div>
+        <div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Client Focus</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Dedication</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-wrap" id="heroTilt">
+        <div class="hero-img-frame">
+          <img src="me.png" alt="Momin Ahmad" onerror="this.style.background='linear-gradient(135deg,#1e1e1e,#0f0f0f)'; this.style.minHeight='460px';this.removeAttribute('src')">
+          <div class="hero-corner tl"></div>
+          <div class="hero-corner br"></div>
+        </div>
+        <div class="hero-tag tag1">Web Developer</div>
+        <div class="hero-tag tag2">
+          <span class="tag-dot"></span>
+          <span>Open to Work</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- ABOUT -->
+<div id="aboutme">
+  <div class="about-inner">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-box">
+        <img src="aboutme.png" alt="About Momin" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#111)';this.style.minHeight='400px';this.removeAttribute('src')">
+      </div>
+      <div class="about-badge">
+        <div class="about-badge-num">1+</div>
+        <div class="about-badge-text">Year Exp.</div>
+      </div>
+    </div>
+    <div class="about-right reveal reveal-delay-2">
+      <div class="section-label">About Me</div>
+      <h2 class="section-title">Building Digital<br>Experiences <span style="color:var(--gold)">That Convert</span></h2>
+      <p>I'm Momin Ahmad, a web and app developer based in Pakistan. I blend clean code with purposeful design to create websites that don't just look great — they get results for your business.</p>
+      <p>Whether you need a portfolio, business site, web app, or custom platform — I bring precision, speed, and a luxury finish to every project.</p>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-dot"></span>HTML & CSS</div>
+        <div class="skill-item"><span class="skill-dot"></span>JavaScript</div>
+        <div class="skill-item"><span class="skill-dot"></span>Responsive Design</div>
+        <div class="skill-item"><span class="skill-dot"></span>Web Apps</div>
+        <div class="skill-item"><span class="skill-dot"></span>Performance Optimization</div>
+        <div class="skill-item"><span class="skill-dot"></span>UI / UX Design</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-label reveal">Services</div>
+  <h2 class="section-title reveal reveal-delay-1">What I <span style="color:var(--gold)">Deliver</span></h2>
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <div class="step-line"></div>
+      <div class="service-num">01</div>
+      <div class="service-icon">🌐</div>
+      <div class="service-title">Website Design & Build</div>
+      <p class="service-desc">Pixel-perfect websites crafted with clean code, fast load times, and mobile-first responsiveness. Your brand elevated online.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="step-line"></div>
+      <div class="service-num">02</div>
+      <div class="service-icon">📱</div>
+      <div class="service-title">Web App Development</div>
+      <p class="service-desc">Interactive web applications with dynamic features, real-time updates, and seamless user experiences across all devices.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="step-line"></div>
+      <div class="service-num">03</div>
+      <div class="service-icon">⚡</div>
+      <div class="service-title">Landing Pages</div>
+      <p class="service-desc">High-converting landing pages engineered to capture leads, showcase offerings, and turn visitors into paying clients.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="step-line"></div>
+      <div class="service-num">04</div>
+      <div class="service-icon">🎨</div>
+      <div class="service-title">UI/UX Design</div>
+      <p class="service-desc">Beautiful, intuitive interfaces designed around your users. From wireframe to final design, every detail matters.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="step-line"></div>
+      <div class="service-num">05</div>
+      <div class="service-icon">🚀</div>
+      <div class="service-title">Performance & SEO</div>
+      <p class="service-desc">Speed optimizations and SEO foundations that help your site rank higher and keep users engaged longer.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="step-line"></div>
+      <div class="service-num">06</div>
+      <div class="service-icon">🛠️</div>
+      <div class="service-title">Maintenance & Support</div>
+      <p class="service-desc">Ongoing care, updates, and technical support so your website stays secure, fast, and always working perfectly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="background:var(--dark2); padding:120px 0;">
+  <div class="section" style="padding-top:0;padding-bottom:0;margin:0 auto;">
+    <div class="projects-header">
+      <div>
+        <div class="section-label reveal">Portfolio</div>
+        <h2 class="section-title reveal reveal-delay-1">Featured <span style="color:var(--gold)">Work</span></h2>
+      </div>
+      <a href="#contact" class="btn-outline reveal reveal-delay-2" style="font-size:12px;">Start a Project →</a>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal reveal-delay-1">
+        <img class="project-img" src="clearn.png" alt="Code Learners" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#0d0d0d)'; this.style.display='block'; this.style.height='220px'; this.removeAttribute('src')">
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Education</span>
+            <span class="tag">Web App</span>
+          </div>
+          <div class="project-title">Code Learners Platform</div>
+          <p class="project-desc">An interactive platform for learning HTML, CSS, JavaScript and more, with structured lessons and live code editors.</p>
+          <a href="https://codelearners2.netlify.app/" class="project-link" target="_blank">Visit Live Site</a>
+        </div>
+      </div>
+      <div class="project-card reveal reveal-delay-2">
+        <img class="project-img" src="tspeed.png" alt="Typing Speed Test" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#0d0d0d)'; this.style.display='block'; this.style.height='220px'; this.removeAttribute('src')">
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Productivity</span>
+            <span class="tag">Interactive</span>
+          </div>
+          <div class="project-title">Typing Speed Test</div>
+          <p class="project-desc">Real-time typing assessment tool with WPM tracking, accuracy metrics, and progressive difficulty challenges.</p>
+          <a href="https://typingtest2.netlify.app" class="project-link" target="_blank">Visit Live Site</a>
+        </div>
+      </div>
+      <div class="project-card reveal reveal-delay-3">
+        <img class="project-img" src="list.jpg" alt="To-Do List" onerror="this.style.background='linear-gradient(135deg,#1a1a1a,#0d0d0d)'; this.style.display='block'; this.style.height='220px'; this.removeAttribute('src')">
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Productivity</span>
+            <span class="tag">Web App</span>
+          </div>
+          <div class="project-title">Smart To-Do List</div>
+          <p class="project-desc">A clean, AI-assisted task management application to organize your daily work and boost productivity.</p>
+          <a href="https://todolistai1.netlify.app" class="project-link" target="_blank">Visit Live Site</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+  <div class="section-label reveal">My Process</div>
+  <h2 class="section-title reveal reveal-delay-1">How We'll <span style="color:var(--gold)">Work Together</span></h2>
+  <div class="process-steps">
+    <div class="process-step reveal reveal-delay-1">
+      <div class="step-line"></div>
+      <div class="step-num">01</div>
+      <div class="step-title">Discovery Call</div>
+      <p class="step-desc">We discuss your goals, vision, timeline, and budget. I listen closely to understand exactly what you need.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <div class="step-line"></div>
+      <div class="step-num">02</div>
+      <div class="step-title">Design & Plan</div>
+      <p class="step-desc">I create wireframes and a project roadmap for your approval before a single line of code is written.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-3">
+      <div class="step-line"></div>
+      <div class="step-num">03</div>
+      <div class="step-title">Build & Refine</div>
+      <p class="step-desc">Development with regular check-ins and revisions. You see progress throughout, not just at the end.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-4">
+      <div class="step-line"></div>
+      <div class="step-num">04</div>
+      <div class="step-title">Launch & Support</div>
+      <p class="step-desc">Smooth deployment, performance checks, and post-launch support so your project keeps performing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div id="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-label reveal">Testimonials</div>
+    <h2 class="section-title reveal reveal-delay-1">What Clients <span style="color:var(--gold)">Say</span></h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal reveal-delay-1">
+        <span class="quote-mark">"</span>
+        <p class="testimonial-text">Momin delivered an exceptional website that truly represents our brand. Fast, clean, and exactly what we envisioned. Communication was seamless throughout.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="author-name">Ahmed Khan</div>
+            <div class="author-role">Business Owner</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <span class="quote-mark">"</span>
+        <p class="testimonial-text">Outstanding work on our platform. Momin understands modern design and delivers quality code. The project was on time and exceeded expectations.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SR</div>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="author-name">Sara Raza</div>
+            <div class="author-role">Startup Founder</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact">
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="section-label">Contact</div>
+      <h2 class="section-title">Let's Build<br>Something <span style="color:var(--gold)">Great</span></h2>
+      <p>Have a project in mind? I'd love to hear about it. Send me a message and let's create something exceptional together.</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">✉</div>
+          <a href="mailto:momin@example.com">momin@example.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <span style="color:var(--muted)">Pakistan · Available Worldwide</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">⏱</div>
+          <span style="color:var(--muted)">Response within 24 hours</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal reveal-delay-2">
+      <div class="form-row">
+        <div class="form-group">
+          <input type="text" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Email Address">
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="text" placeholder="Project Type (e.g. Business Website)">
+      </div>
+      <div class="form-group">
+        <input type="text" placeholder="Budget Range">
+      </div>
+      <div class="form-group">
+        <textarea placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="handleSubmit(this)">Send Message →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#home" class="footer-logo">M<span>.</span>AHMAD</a>
+  <p class="footer-copy">© 2025 Momin Ahmad. Crafted with precision.</p>
+  <div class="footer-socials">
+    <a href="#" class="social-btn" title="GitHub">GH</a>
+    <a href="#" class="social-btn" title="LinkedIn">LI</a>
+    <a href="#" class="social-btn" title="Twitter">TW</a>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
