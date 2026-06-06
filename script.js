@@ -1,26 +1,4 @@
-// CURSOR
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-if (cursor && ring) {
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    setTimeout(() => {
-      ring.style.left = e.clientX + 'px';
-      ring.style.top = e.clientY + 'px';
-    }, 80);
-  });
-  document.querySelectorAll('a, button, .project-card, .service-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      ring.style.transform = 'translate(-50%,-50%) scale(1.8)';
-      ring.style.borderColor = 'rgba(201,168,76,0.8)';
-    });
-    el.addEventListener('mouseleave', () => {
-      ring.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.borderColor = 'rgba(201,168,76,0.5)';
-    });
-  });
-}
+
 
 // NAVBAR SCROLL
 const navbar = document.getElementById('navbar');
