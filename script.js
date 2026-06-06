@@ -161,21 +161,34 @@ function formatDate(iso) {
 function renderReviews() {
   const grid = document.getElementById('reviewsGrid');
   const noMsg = document.getElementById('noReviews');
+  const meta = document.getElementById('reviewsMeta');
   if (!grid) return;
   const reviews = getReviews();
+
   if (reviews.length === 0) {
     grid.innerHTML = '';
-    noMsg && (noMsg.style.display = 'block');
+    noMsg && noMsg.classList.add('show');
+    if (meta) meta.innerHTML = '';
     return;
   }
-  noMsg && (noMsg.style.display = 'none');
-  grid.innerHTML = reviews.slice().reverse().map(r => `
+
+  noMsg && noMsg.classList.remove('show');
+
+  // avg rating
+  const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+  if (meta) meta.innerHTML = `<strong>${reviews.length}</strong> review${reviews.length > 1 ? 's' : ''} &nbsp;·&nbsp; Average rating: <strong>${avg} ★</strong>`;
+
+  grid.innerHTML = reviews.slice().reverse().map((r, i) => `
     <div class="review-card">
-      <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
-      <p class="review-text">"${escapeHtml(r.text)}"</p>
+      <div class="review-card-top">
+        <div class="review-stars">${'★'.repeat(r.rating)}<span class="review-stars-empty">${'★'.repeat(5 - r.rating)}</span></div>
+        <span class="review-num-badge">${r.rating}/5</span>
+      </div>
+      <p class="review-text">${escapeHtml(r.text)}</p>
+      <div class="review-divider"></div>
       <div class="review-author">
         <div class="review-avatar">${escapeHtml(getInitials(r.name))}</div>
-        <div>
+        <div class="review-author-info">
           <div class="review-author-name">${escapeHtml(r.name)}</div>
           <div class="review-author-role">${escapeHtml(r.role)}</div>
           <div class="review-date">${formatDate(r.date)}</div>
