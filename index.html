@@ -17,16 +17,24 @@
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#home" class="nav-logo">M<span>.</span>AHMAD</a>
-  <ul class="nav-links">
-    <li><a href="#home" class="active">Home</a></li>
-    <li><a href="#aboutme">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
+  <a href="#home" class="nav-logo">Portfolio<span>.</span></a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home" class="active" onclick="closeMenu()">Home</a></li>
+    <li><a href="#aboutme" onclick="closeMenu()">About</a></li>
+    <li><a href="#services" onclick="closeMenu()">Services</a></li>
+    <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+    <li><a href="#reviews" onclick="closeMenu()">Reviews</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+    <li class="nav-hire-mobile"><a href="#contact" class="nav-cta" onclick="closeMenu()">Hire Me</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Hire Me</a>
+  <a href="#contact" class="nav-cta nav-cta-desktop">Hire Me</a>
 </nav>
+
+<!-- MOBILE OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
 
 <!-- HERO -->
 <section id="home" style="padding-top:0;">
@@ -247,39 +255,55 @@
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<div id="testimonials">
-  <div class="testimonials-inner">
-    <div class="section-label reveal">Testimonials</div>
+<!-- REVIEWS -->
+<section id="reviews" style="background:var(--dark2);">
+  <div class="section" style="padding-top:120px;padding-bottom:120px;">
+    <div class="section-label reveal">Reviews</div>
     <h2 class="section-title reveal reveal-delay-1">What Clients <span style="color:var(--gold)">Say</span></h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card reveal reveal-delay-1">
-        <span class="quote-mark">"</span>
-        <p class="testimonial-text">Momin delivered an exceptional website that truly represents our brand. Fast, clean, and exactly what we envisioned. Communication was seamless throughout.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">AK</div>
-          <div>
-            <div class="stars">★★★★★</div>
-            <div class="author-name">Ahmed Khan</div>
-            <div class="author-role">Business Owner</div>
+    <p class="reviews-subtitle reveal reveal-delay-2">Real reviews from real clients. No fluff.</p>
+
+    <!-- Reviews Display -->
+    <div class="reviews-grid" id="reviewsGrid">
+      <!-- Loaded from reviews.json -->
+    </div>
+    <div id="noReviews" class="no-reviews-msg" style="display:none;">
+      <p>No reviews yet. Be the first to leave one!</p>
+    </div>
+
+    <!-- Write a Review Form -->
+    <div class="write-review-wrap reveal">
+      <div class="section-label" style="margin-bottom:12px;">Leave a Review</div>
+      <h3 class="write-review-title">Share Your Experience</h3>
+      <div class="review-form" id="reviewForm">
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" id="reviewName" placeholder="Your Name" maxlength="60">
+          </div>
+          <div class="form-group">
+            <input type="text" id="reviewRole" placeholder="Your Role / Company" maxlength="80">
           </div>
         </div>
-      </div>
-      <div class="testimonial-card reveal reveal-delay-2">
-        <span class="quote-mark">"</span>
-        <p class="testimonial-text">Outstanding work on our platform. Momin understands modern design and delivers quality code. The project was on time and exceeded expectations.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">SR</div>
-          <div>
-            <div class="stars">★★★★★</div>
-            <div class="author-name">Sara Raza</div>
-            <div class="author-role">Startup Founder</div>
+        <div class="star-selector">
+          <span class="star-label">Rating:</span>
+          <div class="stars-input" id="starsInput">
+            <span class="star-btn" data-val="1">★</span>
+            <span class="star-btn" data-val="2">★</span>
+            <span class="star-btn" data-val="3">★</span>
+            <span class="star-btn" data-val="4">★</span>
+            <span class="star-btn" data-val="5">★</span>
           </div>
+          <span id="starValue" class="star-count">0 / 5</span>
         </div>
+        <div class="form-group">
+          <textarea id="reviewText" placeholder="Write your honest review here..." maxlength="500"></textarea>
+          <div class="char-count"><span id="charCount">0</span>/500</div>
+        </div>
+        <button class="submit-btn" onclick="submitReview(this)">Submit Review →</button>
+        <p id="reviewMsg" class="review-feedback"></p>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- CONTACT -->
 <div id="contact">
@@ -328,7 +352,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <a href="#home" class="footer-logo">M<span>.</span>AHMAD</a>
+  <a href="#home" class="footer-logo">Portfolio<span>.</span></a>
   <p class="footer-copy">© 2025 Momin Ahmad. Crafted with precision.</p>
   <div class="footer-socials">
     <a href="#" class="social-btn" title="GitHub">GH</a>
