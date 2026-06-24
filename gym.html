@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYM | Elite Performance Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --charcoal: #111113;
+    --dark: #181820;
+    --mid: #232330;
+    --border: #2a2a38;
+    --muted: #888899;
+    --silver: #c8c8d8;
+    --white: #f4f4f8;
+    --blue: #3a7bff;
+    --blue-dim: #1a3a88;
+    --crimson: #c0283a;
+    --emerald: #0f7a5a;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-ui: 'Space Grotesk', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+
+  /* LOADING */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9000;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  #loader.gone { opacity: 0; visibility: hidden; }
+  .loader-inner { text-align: center; }
+  .loader-logo {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: 0.3em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--blue);
+    animation: loaderPulse 1s ease infinite alternate;
+  }
+  .loader-bar {
+    width: 200px; height: 1px;
+    background: var(--border);
+    margin: 1.5rem auto 0;
+    position: relative; overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    position: absolute; inset-y: 0; left: -100%;
+    width: 100%; background: var(--blue);
+    animation: loaderSlide 1.2s ease forwards;
+  }
+  @keyframes loaderPulse { from { opacity: 0.3; } to { opacity: 1; } }
+  @keyframes loaderSlide { to { left: 100%; } }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 1.25rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s, backdrop-filter 0.4s, padding 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    padding: 0.9rem 5%;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.25em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-links {
+    display: flex; gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--silver);
+    text-decoration: none;
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--blue);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--blue);
+    color: #fff !important;
+    padding: 0.5rem 1.25rem !important;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: #2060ee !important; transform: translateY(-1px); }
+  .nav-cta::after { display: none !important; }
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 1.5px;
+    background: var(--white);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .mobile-menu {
+    position: fixed; inset: 0; top: 60px;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(20px);
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2.5rem;
+    z-index: 999;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.2em;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--blue); }
+
+  /* SECTION UTILS */
+  section { position: relative; }
+  .section-eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--blue);
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-left.visible { opacity: 1; transform: none; }
+  .reveal-right { opacity: 0; transform: translateX(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-right.visible { opacity: 1; transform: none; }
+
+  /* ===================== HERO ===================== */
+  #home {
+    height: 100svh;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1800&q=80');
+    background-size: cover; background-position: center 20%;
+    filter: brightness(0.28);
+    transform: scale(1.05);
+    transition: transform 8s ease;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(10,10,10,0.7) 0%, transparent 50%, rgba(10,10,10,0.5) 100%);
+  }
+  .hero-grid-overlay {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(58,123,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(58,123,255,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 0 5%;
+    width: 100%;
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(58,123,255,0.12);
+    border: 1px solid rgba(58,123,255,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-family: var(--font-ui);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(8px);
+  }
+  .hero-tag-dot {
+    width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: blink 1.5s ease infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 7vw, 7rem);
+    line-height: 0.93;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin-bottom: 0;
+  }
+  .hero-h1 .outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--white);
+  }
+  .hero-h1 .accent { color: var(--blue); }
+  .hero-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 420px;
+    margin: 1.5rem auto 2.25rem;
+    line-height: 1.85;
+    font-weight: 300;
+  }
+  .hero-btns {
+    display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: #fff;
+    padding: 0.85rem 2rem;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: none; cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+    white-space: nowrap;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(58,123,255,0.4); }
+  .btn-primary:hover::after { opacity: 1; }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    backdrop-filter: blur(8px);
+    white-space: nowrap;
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-family: var(--font-ui); font-size: 0.6rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+    animation: fadeUp 1s ease 1.5s both;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollLine 1.5s ease infinite;
+  }
+  @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+  @keyframes fadeUp { from{opacity:0;transform:translateX(-50%) translateY(20px)} to{opacity:1;transform:translateX(-50%)} }
+
+  /* ===================== ABOUT ===================== */
+  #about {
+    padding: 10rem 5%;
+    background: var(--charcoal);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .about-visual {
+    position: relative;
+    height: 600px;
+  }
+  .about-img-main {
+    position: absolute;
+    width: 80%; height: 75%;
+    object-fit: cover;
+    top: 0; right: 0;
+    border-radius: 2px;
+    filter: brightness(0.85);
+  }
+  .about-img-small {
+    position: absolute;
+    width: 48%; height: 45%;
+    object-fit: cover;
+    bottom: 0; left: 0;
+    border-radius: 2px;
+    border: 3px solid var(--charcoal);
+    filter: brightness(0.85);
+  }
+  .about-accent-line {
+    position: absolute;
+    width: 2px; height: 120px;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+    bottom: 10%; left: 42%;
+  }
+  .about-text {}
+  .about-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .about-headline em { color: var(--blue); font-style: normal; }
+  .about-body {
+    color: var(--muted);
+    line-height: 1.9;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+  .about-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .feature-card {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    border-radius: 4px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feature-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+  .feature-icon {
+    width: 32px; height: 32px;
+    background: rgba(58,123,255,0.12);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+  .feature-card h4 {
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+  }
+  .feature-card p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ===================== PROGRAMS ===================== */
+  #programs {
+    padding: 10rem 5%;
+    background: var(--black);
+  }
+  .programs-header {
+    max-width: 600px;
+    margin-bottom: 4rem;
+  }
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+  }
+  .program-card {
+    position: relative;
+    height: 420px;
+    overflow: hidden;
+    background: var(--charcoal);
+    cursor: pointer;
+  }
+  .program-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.35);
+    transition: filter 0.5s, transform 0.6s cubic-bezier(.25,.46,.45,.94);
+  }
+  .program-card:hover .program-img { filter: brightness(0.5); transform: scale(1.06); }
+  .program-body {
+    position: absolute; inset: 0;
+    padding: 2rem;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .program-num {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+  .program-card:hover .program-num { color: rgba(58,123,255,0.15); }
+  .program-category {
+    font-family: var(--font-ui);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .program-card:hover .program-category { opacity: 1; transform: none; }
+  .program-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s;
+  }
+  .program-card:hover .program-title { color: var(--white); }
+  .program-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s;
+    opacity: 0;
+  }
+  .program-card:hover .program-desc { max-height: 80px; opacity: 1; }
+  .program-arrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    margin-top: 1rem;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--blue);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+  }
+  .program-card:hover .program-arrow { opacity: 1; transform: none; }
+
+  /* ===================== FACILITIES ===================== */
+  #facilities {
+    padding: 10rem 5%;
+    background: var(--charcoal);
+  }
+  .facilities-header { margin-bottom: 4rem; }
+  .facilities-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: repeat(2, 300px);
+    gap: 1.5px;
+    background: var(--border);
+  }
+  .fac-cell {
+    position: relative; overflow: hidden;
+    background: var(--dark);
+  }
+  .fac-cell-main { grid-row: 1 / 3; }
+  .fac-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+    transition: filter 0.4s, transform 0.6s;
+  }
+  .fac-cell:hover .fac-img { filter: brightness(0.7); transform: scale(1.04); }
+  .fac-label {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+  }
+  .fac-label h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+  .fac-label span {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .fac-cell-main .fac-label h3 { font-size: 2.5rem; }
+  .fac-features {
+    margin-top: 3rem;
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+  }
+  .fac-tag {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 100px;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--silver);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .fac-tag:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* ===================== TRAINERS ===================== */
+  #trainers {
+    padding: 10rem 5%;
+    background: var(--black);
+  }
+  .trainers-header { margin-bottom: 4rem; }
+  .trainers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+  }
+  .trainer-card {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--charcoal);
+    cursor: pointer;
+  }
+  .trainer-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.45) saturate(0.6);
+    transition: filter 0.5s, transform 0.6s;
+  }
+  .trainer-card:hover .trainer-img { filter: brightness(0.6) saturate(0.8); transform: scale(1.05); }
+  .trainer-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%);
+    padding: 2.5rem 1.5rem 1.5rem;
+    transform: translateY(40px);
+    transition: transform 0.4s;
+  }
+  .trainer-card:hover .trainer-info { transform: none; }
+  .trainer-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+  }
+  .trainer-role {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 0.5rem;
+  }
+  .trainer-bio {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+  }
+  .trainer-card:hover .trainer-bio { opacity: 1; transform: none; }
+
+  /* ===================== MEMBERSHIP ===================== */
+  #membership {
+    padding: 10rem 5%;
+    background: var(--charcoal);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .membership-info {}
+  .membership-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .membership-body {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.9;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+  .membership-perks { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .membership-perks li {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    color: var(--silver);
+  }
+  .membership-perks li::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .membership-form {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2.5rem;
+  }
+  .form-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+  }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--blue); }
+  .form-group select option { background: var(--dark); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-submit {
+    width: 100%;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    transition: background 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .form-submit:hover { background: #2060ee; transform: translateY(-1px); }
+
+  /* ===================== REVIEWS ===================== */
+  #reviews {
+    padding: 10rem 5%;
+    background: var(--black);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .reviews-left {}
+  .reviews-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+  }
+  .reviews-sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .review-placeholder {
+    margin-top: 3rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .review-ph-card {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .review-ph-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--mid);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--muted);
+  }
+  .review-ph-content {}
+  .review-ph-name {
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .review-ph-stars { color: var(--blue); font-size: 0.7rem; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .review-ph-text { font-size: 0.8rem; color: var(--muted); line-height: 1.6; font-style: italic; }
+  .reviews-right {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2.5rem;
+  }
+
+  /* ===================== CONTACT ===================== */
+  #contact {
+    padding: 10rem 5%;
+    background: var(--charcoal);
+  }
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .contact-info-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .contact-detail {
+    display: flex; gap: 1rem; align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+  .contact-detail-icon {
+    width: 38px; height: 38px;
+    background: rgba(58,123,255,0.1);
+    border: 1px solid rgba(58,123,255,0.2);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .contact-detail-text h4 {
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+  .contact-detail-text p {
+    font-size: 0.9rem;
+    color: var(--silver);
+  }
+  .contact-hours {
+    margin-top: 2.5rem;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+  .contact-hours h4 {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 1rem;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-row span:last-child { color: var(--silver); }
+
+  /* ===================== FOOTER ===================== */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 4rem 5% 2rem;
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .footer-brand {}
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.3em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--blue); }
+  .footer-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-top: 1rem;
+  }
+  .footer-col h4 {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a {
+    color: var(--silver);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.75rem; color: var(--muted);
+  }
+
+  /* ===================== MODAL ===================== */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 5000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    padding: 2rem;
+  }
+  .modal-overlay.active { opacity: 1; visibility: visible; }
+  .modal {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3rem;
+    max-width: 480px; width: 100%;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+    text-align: center;
+  }
+  .modal-overlay.active .modal { transform: none; }
+  .modal-icon {
+    width: 60px; height: 60px;
+    background: rgba(58,123,255,0.12);
+    border: 1px solid rgba(58,123,255,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 1.5rem;
+  }
+  .modal h3 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+  .modal p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .modal-close {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 3px;
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: #2060ee; }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 1100px) {
+    .programs-grid { grid-template-columns: repeat(2, 1fr); }
+    .trainers-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .hero-h1 { font-size: clamp(3rem, 6.5vw, 6rem); }
+  }
+  @media (max-width: 900px) {
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { height: 400px; }
+    #membership { grid-template-columns: 1fr; gap: 3rem; }
+    #reviews { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .facilities-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .fac-cell-main { grid-row: auto; height: 400px; }
+    .fac-cell { height: 250px; }
+    .hero-h1 { font-size: clamp(2.8rem, 7vw, 5rem); }
+  }
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .trainers-grid { grid-template-columns: 1fr 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .about-features { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-h1 { font-size: 2.8rem; }
+    .hero-sub { font-size: 0.85rem; }
+  }
+  @media (max-width: 480px) {
+    .trainers-grid { grid-template-columns: 1fr; }
+    .hero-h1 { font-size: 2.4rem; line-height: 0.95; }
+    .hero-tag { font-size: 0.58rem; letter-spacing: 0.1em; }
+    .hero-sub { font-size: 0.82rem; margin-bottom: 1.75rem; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 260px; justify-content: center; }
+    .hero-scroll { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">GYM</div>
+    <div class="loader-bar"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-icon">⚡</div>
+    <h3 id="modal-title">DEMO MODE</h3>
+    <p id="modal-body"></p>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">GYM</a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#facilities">Facilities</a></li>
+    <li><a href="#membership">Membership</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#membership" class="nav-cta">Join Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="closeMobile()">Home</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#programs" onclick="closeMobile()">Programs</a>
+  <a href="#facilities" onclick="closeMobile()">Facilities</a>
+  <a href="#membership" onclick="closeMobile()">Membership</a>
+  <a href="#reviews" onclick="closeMobile()">Reviews</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+     
+    <h1 class="hero-h1">
+      TRAIN<br>
+      <span class="outline">HARD.</span><br>
+      <span class="accent">PERFORM</span><br>
+      BETTER.
+    </h1>
+    <p class="hero-sub">Where elite athletes and everyday champions forge their best performance. No shortcuts. No excuses. Just results.</p>
+    <div class="hero-btns">
+      <a href="#membership" class="btn-primary">Join GYM →</a>
+      <a href="#programs" class="btn-outline">Explore Programs</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal-left">
+    <img class="about-img-main" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&q=80" alt="Elite training">
+    <img class="about-img-small" src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=600&q=80" alt="Strength training">
+    <div class="about-accent-line"></div>
+  </div>
+  <div class="about-text reveal-right">
+    <div class="section-eyebrow">Our Philosophy</div>
+    <h2 class="about-headline">Built for Those Who<br>Refuse to <em>Settle</em></h2>
+    <p class="about-body">GYM isn't just a gym — it's a system. We combine cutting-edge programming, elite-level equipment, and a coaching culture that pushes every member beyond what they thought possible. From your first session to your peak performance, we're with you every rep of the way.</p>
+    <div class="about-features">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h4>Expert Coaching</h4>
+        <p>Certified trainers with performance-sport backgrounds who tailor every session to your goals.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h4>Modern Equipment</h4>
+        <p>Competition-grade rigs, free weights, and smart cardio machines updated every two years.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h4>Performance Tracking</h4>
+        <p>Data-driven progress monitoring so you can see exactly how far you've come.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤝</div>
+        <h4>Real Community</h4>
+        <p>A culture that celebrates every win, holds you accountable, and keeps you coming back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="programs-header reveal">
+    <div class="section-eyebrow">What We Offer</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);line-height:1;letter-spacing:0.03em;">Training<br>Programs</h2>
+  </div>
+  <div class="programs-grid">
+    <div class="program-card reveal">
+      <img class="program-img" src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=700&q=75" alt="Strength Training">
+      <div class="program-body">
+        <div class="program-num">01</div>
+        <div class="program-category">Powerlifting & Hypertrophy</div>
+        <h3 class="program-title">STRENGTH<br>TRAINING</h3>
+        <p class="program-desc">Progressive overload programming built around compound lifts. Squat, deadlift, press — master the fundamentals.</p>
+        <div class="program-arrow">Learn More →</div>
+      </div>
+    </div>
+    <div class="program-card reveal">
+      <img class="program-img" src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=700&q=75" alt="Functional Fitness">
+      <div class="program-body">
+        <div class="program-num">02</div>
+        <div class="program-category">Movement & Mobility</div>
+        <h3 class="program-title">FUNCTIONAL<br>FITNESS</h3>
+        <p class="program-desc">Train movements, not muscles. Build real-world strength, agility, and stability that carries over everywhere.</p>
+        <div class="program-arrow">Learn More →</div>
+      </div>
+    </div>
+    <div class="program-card reveal">
+      <img class="program-img" src="https://images.unsplash.com/photo-1571388208497-71bedc66e932?w=700&q=75" alt="Personal Training">
+      <div class="program-body">
+        <div class="program-num">03</div>
+        <div class="program-category">1-on-1 Coaching</div>
+        <h3 class="program-title">PERSONAL<br>TRAINING</h3>
+        <p class="program-desc">Total attention from a dedicated coach. Customized plans, form checks, and real accountability.</p>
+        <div class="program-arrow">Learn More →</div>
+      </div>
+    </div>
+    <div class="program-card reveal">
+      <img class="program-img" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&q=75" alt="Cardio">
+      <div class="program-body">
+        <div class="program-num">04</div>
+        <div class="program-category">Endurance & Conditioning</div>
+        <h3 class="program-title">CARDIO<br>PROGRAMS</h3>
+        <p class="program-desc">Zone 2 endurance, HIIT protocols, and sport-specific conditioning for every fitness level.</p>
+        <div class="program-arrow">Learn More →</div>
+      </div>
+    </div>
+    <div class="program-card reveal">
+      <img class="program-img" src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=700&q=75" alt="Group Classes">
+      <div class="program-body">
+        <div class="program-num">05</div>
+        <div class="program-category">Community Sessions</div>
+        <h3 class="program-title">GROUP<br>CLASSES</h3>
+        <p class="program-desc">High-energy group sessions where shared effort creates unbeatable momentum. Come ready to work.</p>
+        <div class="program-arrow">Learn More →</div>
+      </div>
+    </div>
+    <div class="program-card reveal">
+      <img class="program-img" src="https://images.unsplash.com/photo-1521804906057-1df8fdb718b7?w=700&q=75" alt="Athletic Performance">
+      <div class="program-body">
+        <div class="program-num">06</div>
+        <div class="program-category">Sport-Specific</div>
+        <h3 class="program-title">ATHLETIC<br>PERFORMANCE</h3>
+        <p class="program-desc">Speed, power, and explosiveness for competitive athletes. Train like a pro, perform like one.</p>
+        <div class="program-arrow">Learn More →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITIES -->
+<section id="facilities">
+  <div class="facilities-header reveal">
+    <div class="section-eyebrow">Our Space</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);line-height:1;letter-spacing:0.03em;">World-Class<br>Facilities</h2>
+  </div>
+  <div class="facilities-layout reveal">
+    <div class="fac-cell fac-cell-main">
+      <img class="fac-img" src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=900&q=80" alt="Main gym floor">
+      <div class="fac-label">
+        <h3>Main Training Floor</h3>
+        <span>15,000 sq ft of pure performance</span>
+      </div>
+    </div>
+    <div class="fac-cell">
+      <img class="fac-img" src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=700&q=75" alt="Cardio zone">
+      <div class="fac-label">
+        <h3>Cardio Zone</h3>
+        <span>Smart machines & open sprint lanes</span>
+      </div>
+    </div>
+    <div class="fac-cell">
+      <img class="fac-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=75" alt="Functional training">
+      <div class="fac-label">
+        <h3>Functional Area</h3>
+        <span>Rigs, cables & open floor space</span>
+      </div>
+    </div>
+  </div>
+  <div class="fac-features reveal">
+    <div class="fac-tag">Recovery Lounge</div>
+    <div class="fac-tag">Premium Locker Rooms</div>
+    <div class="fac-tag">Sauna & Cold Plunge</div>
+    <div class="fac-tag">Juice Bar</div>
+    <div class="fac-tag">Private Coaching Studios</div>
+    <div class="fac-tag">24/7 Keycard Access</div>
+    <div class="fac-tag">Secure Parking</div>
+    <div class="fac-tag">On-Site Physio</div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section id="trainers">
+  <div class="trainers-header reveal">
+    <div class="section-eyebrow">Our Team</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);line-height:1;letter-spacing:0.03em;">The Coaches<br>Behind Your Progress</h2>
+  </div>
+  <div class="trainers-grid">
+    <div class="trainer-card reveal">
+      <img class="trainer-img" src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=500&q=75" alt="Trainer">
+      <div class="trainer-info">
+        <div class="trainer-role">Head of Strength & Conditioning</div>
+        <div class="trainer-name">MARCUS COLE</div>
+        <p class="trainer-bio">Former national-level powerlifter. Specializes in progressive strength programming and athlete development.</p>
+      </div>
+    </div>
+    <div class="trainer-card reveal">
+      <img class="trainer-img" src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=500&q=75" alt="Trainer">
+      <div class="trainer-info">
+        <div class="trainer-role">Functional Movement & Mobility</div>
+        <div class="trainer-name">SARAH PARK</div>
+        <p class="trainer-bio">Certified movement specialist. Helps athletes unlock better performance by fixing how their body moves first.</p>
+      </div>
+    </div>
+    <div class="trainer-card reveal">
+      <img class="trainer-img" src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=500&q=75" alt="Trainer">
+      <div class="trainer-info">
+        <div class="trainer-role">Athletic Performance Coach</div>
+        <div class="trainer-name">DANTE RIVERS</div>
+        <p class="trainer-bio">10 years in elite sport conditioning. Works with serious athletes who need measurable results fast.</p>
+      </div>
+    </div>
+    <div class="trainer-card reveal">
+      <img class="trainer-img" src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=500&q=75" alt="Trainer">
+      <div class="trainer-info">
+        <div class="trainer-role">Group Classes & HIIT</div>
+        <div class="trainer-name">AVA CHEN</div>
+        <p class="trainer-bio">High-energy group coach with a gift for making hard sessions feel worth every second of discomfort.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section id="membership">
+  <div class="membership-info reveal-left">
+    <div class="section-eyebrow">Start Today</div>
+    <h2 class="membership-headline">Your First<br>Step Starts <span style="color:var(--blue)">Here</span></h2>
+    <p class="membership-body">Fill in the form and one of our team will reach out within 24 hours to walk you through your options, answer any questions, and get you started the right way.</p>
+    <ul class="membership-perks">
+      <li>Free facility tour and consultation included</li>
+      <li>Flexible monthly and annual plans</li>
+      <li>No lock-in contracts on standard memberships</li>
+      <li>Access to all group classes with any plan</li>
+      <li>Complimentary fitness assessment on joining</li>
+      <li>Dedicated app for bookings and progress tracking</li>
+    </ul>
+  </div>
+  <div class="membership-form reveal-right">
+    <div class="form-title">MEMBERSHIP INQUIRY</div>
+    <form id="membershipForm" onsubmit="handleMembership(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Alex Johnson" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+1 555 000 0000" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="alex@example.com" required>
+      </div>
+      <div class="form-group">
+        <label>Primary Fitness Goal</label>
+        <select required>
+          <option value="" disabled selected>Select your goal</option>
+          <option>Build Strength & Muscle</option>
+          <option>Lose Body Fat</option>
+          <option>Improve Athletic Performance</option>
+          <option>General Fitness & Health</option>
+          <option>Increase Endurance</option>
+          <option>Injury Rehabilitation</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Membership Type</label>
+        <select required>
+          <option value="" disabled selected>Select membership</option>
+          <option>Standard — Gym Access</option>
+          <option>Performance — Gym + Classes</option>
+          <option>Elite — Full Access + PT Sessions</option>
+          <option>I'd like a consultation first</option>
+        </select>
+      </div>
+      <button type="submit" class="form-submit">Request Membership →</button>
+    </form>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="reviews-left reveal-left">
+    <div class="section-eyebrow">Community</div>
+    <h2 class="reviews-headline">What Members<br>Are Saying</h2>
+    <p class="reviews-sub">Reviews are submitted by verified members and stored in our database. Once our review system is live, member testimonials will appear here in real time.</p>
+    <div class="review-placeholder">
+      <div class="review-ph-card">
+        <div class="review-ph-avatar">M</div>
+        <div class="review-ph-content">
+          <div class="review-ph-name">Member reviews appear here</div>
+          <div class="review-ph-stars">★ ★ ★ ★ ★</div>
+          <div class="review-ph-text">Your review will be visible to the community once submitted and verified. Be the first to share your GYM experience.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-right reveal-right">
+    <div class="form-title">LEAVE A REVIEW</div>
+    <form id="reviewForm" onsubmit="handleReview(event)">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Alex Johnson" required>
+      </div>
+      <div class="form-group">
+        <label>Rating</label>
+        <select required>
+          <option value="" disabled selected>Select rating</option>
+          <option>⭐⭐⭐⭐⭐ — Exceptional</option>
+          <option>⭐⭐⭐⭐ — Great</option>
+          <option>⭐⭐⭐ — Good</option>
+          <option>⭐⭐ — Needs Work</option>
+          <option>⭐ — Disappointing</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea placeholder="Tell us about your experience at GYM..." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">Submit Review →</button>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="reveal-left">
+      <div class="section-eyebrow">Get in Touch</div>
+      <h2 class="contact-info-headline">We're Here<br>to Help</h2>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📍</div>
+        <div class="contact-detail-text">
+          <h4>Location</h4>
+          <p>1200 Performance Drive, Suite 100<br>New York, NY 10001</p>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📞</div>
+        <div class="contact-detail-text">
+          <h4>Phone</h4>
+          <p>+1 (555) 000-0000</p>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">✉️</div>
+        <div class="contact-detail-text">
+          <h4>Email</h4>
+          <p>hello@GYMperformance.com</p>
+        </div>
+      </div>
+      <div class="contact-hours">
+        <h4>Gym Hours</h4>
+        <div class="hours-row"><span>Monday – Friday</span><span>5:00 AM – 11:00 PM</span></div>
+        <div class="hours-row"><span>Saturday</span><span>6:00 AM – 10:00 PM</span></div>
+        <div class="hours-row"><span>Sunday</span><span>7:00 AM – 8:00 PM</span></div>
+        <div class="hours-row"><span>Public Holidays</span><span>8:00 AM – 6:00 PM</span></div>
+      </div>
+    </div>
+    <div class="membership-form reveal-right">
+      <div class="form-title">SEND A MESSAGE</div>
+      <form id="contactForm" onsubmit="handleContact(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Alex Johnson" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="alex@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="How can we help you?" required style="min-height:140px"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#home" class="footer-logo">AP<span>EX</span></a>
+      <p class="footer-desc">Elite performance training for those who refuse to settle. Train hard, perform better, live fully.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#trainers">Trainers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Membership</h4>
+      <ul>
+        <li><a href="#membership">Standard</a></li>
+        <li><a href="#membership">Performance</a></li>
+        <li><a href="#membership">Elite</a></li>
+        <li><a href="#membership">Corporate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">Accessibility</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 GYM Performance. All rights reserved.</span>
+    <span>Designed for those who push limits.</span>
+  </div>
+</footer>
+
+<script>
+  // ---- LOADER ----
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('gone');
+      document.getElementById('heroBg').classList.add('loaded');
+    }, 1400);
+  });
+
+  // ---- NAVBAR ----
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // ---- HAMBURGER ----
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  function closeMobile() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ---- SCROLL REVEAL ----
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ---- MODAL ----
+  function openModal(title, body) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').textContent = body;
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+
+  // ---- FORM HANDLERS ----
+  function handleMembership(e) {
+    e.preventDefault();
+    openModal('DEMO MODE', 'Membership functionality is disabled in this demo version. A live membership system can be integrated using a backend service.');
+    e.target.reset();
+  }
+  function handleReview(e) {
+    e.preventDefault();
+    openModal('DEMO MODE', 'Review functionality is disabled in this demo version. A backend database is required to store customer reviews.');
+    e.target.reset();
+  }
+  function handleContact(e) {
+    e.preventDefault();
+    openModal('DEMO MODE', 'Contact functionality is disabled in this demo version. A backend service is required to receive messages.');
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
