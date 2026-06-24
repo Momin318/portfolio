@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTAURANT — Premium Culinary Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@100;300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #05080f;
+            --primary-dark: #0f1419;
+            --secondary-dark: #1a1f2e;
+            --accent-dark-blue: #1c2841;
+            --accent-deep-navy: #243557;
+            --accent-teal: #2a6f7a;
+            --accent-emerald: #2d5a50;
+            --cream: #faf8f6;
+            --light-beige: #f0ebe5;
+            --soft-gray: #8a8a8a;
+            --medium-gray: #5a5a5a;
+            --text-primary: #0f1419;
+            --text-secondary: #5a5a5a;
+            --border-color: rgba(0, 0, 0, 0.06);
+            --accent-gold: #d4a574;
+            --transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-smooth: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, #f5f2ed 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(42, 111, 122, 0.03) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(45, 90, 80, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            background: rgba(250, 248, 246, 0);
+            backdrop-filter: blur(0px);
+            z-index: 1000;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-bottom: 1px solid transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(250, 248, 246, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom-color: var(--border-color);
+            box-shadow: 0 8px 32px rgba(15, 20, 25, 0.08);
+            padding: 0 3rem;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            color: var(--primary-black);
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--accent-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.35s ease;
+            text-transform: uppercase;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2.5px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-emerald));
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--accent-teal);
+        }
+
+        .nav-menu a:hover::before,
+        .nav-menu a.active::before {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 26px;
+            height: 2.5px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-emerald));
+            transition: var(--transition-smooth);
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(11px, 11px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-dark-blue) 50%, var(--accent-deep-navy) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 85px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1504674900149-731c6e0763f8?w=2000&h=1200&fit=crop') center/cover;
+            opacity: 0.25;
+            animation: zoomInHero 25s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(15, 20, 25, 0.6) 0%, rgba(28, 40, 65, 0.5) 50%, rgba(42, 111, 122, 0.4) 100%);
+            z-index: 2;
+        }
+
+        @keyframes zoomInHero {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: var(--cream);
+            animation: fadeInUpHero 1.2s ease-out;
+        }
+
+        @keyframes fadeInUpHero {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 1.2rem;
+            line-height: 1.15;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            margin-bottom: 3.5rem;
+            opacity: 0.92;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            border: 2px solid transparent;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-emerald));
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn-primary {
+            background: var(--cream);
+            color: var(--primary-black);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-gold);
+            color: var(--cream);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--cream);
+            border: 2px solid var(--cream);
+        }
+
+        .btn-secondary:hover {
+            background: var(--cream);
+            color: var(--primary-black);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(250, 248, 246, 0.2);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounceSmooth 2.5s ease-in-out infinite;
+            color: var(--cream);
+            font-size: 20px;
+        }
+
+        @keyframes bounceSmooth {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+
+        /* ABOUT SECTION */
+        .about {
+            padding: 140px 0;
+            background: var(--cream);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 700;
+            margin-bottom: 1.8rem;
+            color: var(--primary-black);
+            letter-spacing: -1px;
+            line-height: 1.15;
+        }
+
+        .about-content p {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 1.8rem;
+            font-weight: 400;
+        }
+
+        .about-image {
+            position: relative;
+            height: 550px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(15, 20, 25, 0.12);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(42, 111, 122, 0.2) 0%, rgba(45, 90, 80, 0.1) 100%);
+            z-index: 2;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.04);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.2rem;
+            margin-top: 3.5rem;
+        }
+
+        .feature-card {
+            padding: 2.2rem;
+            background: linear-gradient(135deg, rgba(42, 111, 122, 0.04) 0%, rgba(45, 90, 80, 0.03) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-emerald));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .feature-card:hover {
+            background: linear-gradient(135deg, rgba(42, 111, 122, 0.08) 0%, rgba(45, 90, 80, 0.06) 100%);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(42, 111, 122, 0.1);
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--primary-black);
+            letter-spacing: 0.5px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* MENU SECTION */
+        .menu {
+            padding: 140px 0;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-deep-navy) 50%, var(--accent-dark-blue) 100%);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(42, 111, 122, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 20s ease-in-out infinite;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            font-size: 16px;
+            opacity: 0.85;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .menu-category h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin-bottom: 2.5rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            padding-left: 1.2rem;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+            gap: 1rem;
+        }
+
+        .menu-item h4 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--cream);
+            letter-spacing: 0.3px;
+        }
+
+        .menu-item-price {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            white-space: nowrap;
+        }
+
+        .menu-item p {
+            font-size: 14px;
+            opacity: 0.82;
+            line-height: 1.7;
+            color: rgba(250, 248, 246, 0.9);
+        }
+
+        /* CHEF SECTION */
+        .chef {
+            padding: 140px 0;
+            background: var(--cream);
+            position: relative;
+        }
+
+        .chef::before {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(45, 90, 80, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .chef-container {
+            max-width: 850px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chef-image {
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 3.5rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(15, 20, 25, 0.15);
+            border: 2px solid var(--light-beige);
+        }
+
+        .chef-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .chef-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .chef h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary-black);
+            font-weight: 700;
+        }
+
+        .chef-title {
+            font-size: 13px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent-teal);
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+        }
+
+        .chef-bio {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        /* RESERVATION SECTION */
+        .reservation {
+            padding: 140px 0;
+            background: linear-gradient(135deg, var(--accent-dark-blue) 0%, var(--accent-deep-navy) 50%, #1f2d47 100%);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reservation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(42, 111, 122, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 25s ease-in-out infinite;
+        }
+
+        .reservation-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .reservation h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--cream);
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid rgba(212, 165, 116, 0.3);
+            background: rgba(250, 248, 246, 0.06);
+            color: var(--cream);
+            font-family: 'Inter', sans-serif;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(250, 248, 246, 0.5);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            background: rgba(250, 248, 246, 0.1);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.2);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            color-scheme: dark;
+        }
+
+        .form-group select option {
+            background: var(--primary-dark);
+            color: var(--cream);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-emerald) 100%);
+            color: var(--cream);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-size: 13px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(42, 111, 122, 0.4);
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        /* REVIEWS SECTION */
+        .reviews {
+            padding: 140px 0;
+            background: var(--cream);
+            position: relative;
+        }
+
+        .reviews .section-header {
+            margin-bottom: 60px;
+        }
+
+        .reviews h2 {
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--accent-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .reviews-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .reviews-form {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-dark-blue) 100%);
+            color: var(--cream);
+            padding: 3.5rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(15, 20, 25, 0.2);
+            border: 1px solid rgba(212, 165, 116, 0.1);
+        }
+
+        .reviews-form h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+            color: var(--accent-gold);
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .star {
+            font-size: 32px;
+            cursor: pointer;
+            color: rgba(250, 248, 246, 0.3);
+            transition: var(--transition);
+        }
+
+        .star:hover,
+        .star.active {
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
+            transform: scale(1.15) rotate(10deg);
+        }
+
+        /* CONTACT SECTION */
+        .contact {
+            padding: 140px 0;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent-deep-navy) 50%, #1f2d47 100%);
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            right: -10%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(45, 90, 80, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+            color: var(--accent-gold);
+        }
+
+        .contact-item {
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-item h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-teal);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .contact-item p {
+            font-size: 16px;
+            color: var(--cream);
+            line-height: 1.7;
+        }
+
+        .contact-form {
+            background: rgba(250, 248, 246, 0.05);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 165, 116, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-form h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+            color: var(--accent-gold);
+        }
+
+        /* FOOTER */
+        footer {
+            background: linear-gradient(135deg, var(--primary-black) 0%, var(--primary-dark) 100%);
+            color: var(--cream);
+            padding: 80px 0 40px;
+            border-top: 1px solid rgba(212, 165, 116, 0.1);
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-section a {
+            display: block;
+            font-size: 14px;
+            color: var(--soft-gray);
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-gold);
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(42, 111, 122, 0.2) 0%, rgba(45, 90, 80, 0.1) 100%);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 16px;
+            color: var(--accent-teal);
+        }
+
+        .social-icons a:hover {
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-emerald) 100%);
+            color: var(--cream);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(42, 111, 122, 0.3);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(212, 165, 116, 0.1);
+            padding-top: 2.5rem;
+            text-align: center;
+            font-size: 13px;
+            color: var(--soft-gray);
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 8, 15, 0.6);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--cream) 0%, #f8f5f0 100%);
+            padding: 3.5rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(15, 20, 25, 0.3);
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--light-beige);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            color: var(--primary-black);
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-emerald) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .modal-close {
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-emerald) 100%);
+            color: var(--cream);
+            border: none;
+            padding: 14px 40px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 700;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+        }
+
+        .modal-close:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(42, 111, 122, 0.3);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 85px;
+                flex-direction: column;
+                background: linear-gradient(135deg, var(--cream) 0%, #f8f5f0 100%);
+                width: 100%;
+                text-align: center;
+                gap: 0;
+                padding: 3rem 0;
+                transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                border-bottom: 2px solid var(--border-color);
+                box-shadow: 0 15px 40px rgba(15, 20, 25, 0.15);
+                max-height: calc(100vh - 85px);
+                overflow-y: auto;
+            }
+
+            .nav-menu li {
+                border-bottom: 1px solid var(--border-color);
+                padding: 1.2rem 0;
+            }
+
+            .nav-menu li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-menu a {
+                padding: 0.5rem;
+                display: block;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            nav {
+                height: 85px;
+            }
+
+            .logo {
+                font-size: 22px;
+                letter-spacing: 2px;
+            }
+
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .about-image {
+                height: 450px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .menu-categories {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .hero {
+                margin-top: 85px;
+                height: 90vh;
+                min-height: 600px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            nav {
+                padding: 0 1.2rem;
+            }
+
+            .reviews-form,
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .modal-content {
+                padding: 2.5rem;
+                max-width: 90%;
+            }
+
+            .chef-image {
+                width: 260px;
+                height: 260px;
+            }
+
+            .footer-content {
+                gap: 2rem;
+            }
+
+            .section-header {
+                margin-bottom: 50px;
+            }
+
+            .about,
+            .menu,
+            .chef,
+            .reservation,
+            .reviews,
+            .contact {
+                padding: 100px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+                padding: 14px 20px;
+                font-size: 12px;
+            }
+
+            .btn-submit {
+                padding: 14px 20px;
+                font-size: 12px;
+            }
+
+            .chef-image {
+                width: 200px;
+                height: 200px;
+                margin: 0 auto 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+                max-width: 95%;
+            }
+
+            .modal-content h3 {
+                font-size: 1.5rem;
+            }
+
+            .about,
+            .menu,
+            .chef,
+            .reservation,
+            .reviews,
+            .contact {
+                padding: 80px 0;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 14px;
+            }
+
+            .feature-card p {
+                font-size: 13px;
+            }
+
+            .menu-item h4 {
+                font-size: 15px;
+            }
+
+            .menu-item p {
+                font-size: 13px;
+            }
+
+            .chef h2 {
+                font-size: 2rem;
+            }
+
+            .chef-bio {
+                font-size: 14px;
+            }
+
+            .contact-info h3,
+            .contact-form h3,
+            .reviews-form h3 {
+                font-size: 1.5rem;
+            }
+
+            .form-group label {
+                font-size: 11px;
+            }
+
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+
+            .footer-section a {
+                margin-bottom: 0.6rem;
+                font-size: 13px;
+            }
+
+            .star {
+                font-size: 24px;
+            }
+
+            .hero {
+                height: 85vh;
+                min-height: 500px;
+            }
+
+            .about-grid {
+                gap: 2rem;
+            }
+
+            .reservation-container {
+                max-width: 100%;
+            }
+
+            .reviews-container {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .btn, .btn-submit {
+                padding: 12px 16px;
+                font-size: 11px;
+            }
+
+            .chef-image {
+                width: 160px;
+                height: 160px;
+            }
+
+            .contact-item h4 {
+                font-size: 11px;
+            }
+
+            .contact-item p {
+                font-size: 14px;
+            }
+        }
+
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transition);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RIPPLE EFFECT */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: rippleEffect 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* PAGE LOAD */
+        body {
+            opacity: 0;
+            animation: pageLoad 0.6s ease-out 0.2s forwards;
+        }
+
+        @keyframes pageLoad {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* FORM GROUP TRANSITION */
+        .form-group {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="logo">RESTAURANT</div>
+        <ul class="nav-menu">
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#menu" class="nav-link">Menu</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#chef" class="nav-link">Chef</a></li>
+            <li><a href="#reservations" class="nav-link">Reserve</a></li>
+            <li><a href="#reviews" class="nav-link">Reviews</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Exquisite Culinary Artistry</h1>
+            <p>Experience refinement through innovative gastronomy and impeccable craftsmanship</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="document.getElementById('reservations').scrollIntoView();">Reserve Table</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('menu').scrollIntoView();">View Menu</button>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content reveal">
+                    <h2>Contemporary Culinary Excellence</h2>
+                    <p>RESTAURANT represents a paradigm shift in fine dining—where meticulous ingredient sourcing meets visionary technique. Our commitment extends beyond the plate, encompassing sustainability, education, and the celebration of culinary craftsmanship.</p>
+                    <p>Each dish is a composition, crafted with precision and passion. We believe gastronomy is a medium for storytelling, where flavors become narratives and presentations evoke emotion and wonder.</p>
+                    <div class="features-grid">
+                        <div class="feature-card reveal">
+                            <h3>Premium Sourcing</h3>
+                            <p>Ethically sourced ingredients from world-class producers and artisanal suppliers</p>
+                        </div>
+                        <div class="feature-card reveal">
+                            <h3>Culinary Innovation</h3>
+                            <p>Cutting-edge techniques blended with classical foundations and molecular gastronomy</p>
+                        </div>
+                        <div class="feature-card reveal">
+                            <h3>Expert Craftsmanship</h3>
+                            <p>Extensive training in Michelin-starred establishments across Europe and Asia</p>
+                        </div>
+                        <div class="feature-card reveal">
+                            <h3>Unforgettable Experience</h3>
+                            <p>Curated service rituals that elevate dining into a multi-sensory celebration</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image reveal">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773901c5a41?w=700&h=800&fit=crop" alt="Modern restaurant dining interior">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU SECTION -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <h2>Culinary Selection</h2>
+                <p>Seasonal offerings that celebrate technique, flavor, and artistic vision</p>
+            </div>
+            <div class="menu-categories">
+                <div class="reveal">
+                    <h3>Entrées</h3>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Caviar & Foam Expression</h4>
+                            <span class="menu-item-price">$38</span>
+                        </div>
+                        <p>Delicate pearl tapioca, crème fraîche foam, and premium Beluga caviar on brioche</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Seasonal Vegetables</h4>
+                            <span class="menu-item-price">$28</span>
+                        </div>
+                        <p>Farm-to-table produce with fermented elements and modern plating techniques</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Foie Gras Terrine</h4>
+                            <span class="menu-item-price">$36</span>
+                        </div>
+                        <p>Hand-torchéd, with brioche emulsion, black truffle, and aged balsamic reduction</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Seared Scallops</h4>
+                            <span class="menu-item-price">$34</span>
+                        </div>
+                        <p>Day-boat harvest, brown butter gastrique, micro herbs and citrus oil</p>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <h3>Mains</h3>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Wagyu À la Plancha</h4>
+                            <span class="menu-item-price">$68</span>
+                        </div>
+                        <p>45-day dry-aged Japanese A5, smoked miso, roasted bone marrow, charred vegetables</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Atlantic Halibut</h4>
+                            <span class="menu-item-price">$56</span>
+                        </div>
+                        <p>Sustainably wild-caught, skin-on crispy, champagne velouté, caviar oil</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Cornish Game Hen</h4>
+                            <span class="menu-item-price">$52</span>
+                        </div>
+                        <p>Sous-vide then finished, truffle jus, heirloom root vegetables, aged sherry</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Lamb Loin Duet</h4>
+                            <span class="menu-item-price">$58</span>
+                        </div>
+                        <p>Pink peppercorn crust, pommes Anna, seasonal green, red wine gastrique</p>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <h3>Finales & Café</h3>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Dark Chocolate Soufflé</h4>
+                            <span class="menu-item-price">$18</span>
+                        </div>
+                        <p>70% cacao, Grand Marnier mousse, vanilla bean ice cream, gold leaf accent</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Matcha & White Chocolate</h4>
+                            <span class="menu-item-price">$16</span>
+                        </div>
+                        <p>Japanese matcha cremeux, white chocolate tuile, green tea ice cream</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Single-Origin Espresso</h4>
+                            <span class="menu-item-price">$10</span>
+                        </div>
+                        <p>Ethiopian Yirgacheffe, in-house roasted, specialty competition-grade extraction</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h4>Deconstructed Tarte</h4>
+                            <span class="menu-item-price">$16</span>
+                        </div>
+                        <p>Seasonal fruit components, pastry cream sphere, edible flowers, micro herbs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHEF SECTION -->
+    <section class="chef" id="chef">
+        <div class="container">
+            <div class="chef-container reveal">
+                <div class="chef-image">
+                    <img src="https://images.unsplash.com/photo-1504674900149-731c6e0763f8?w=400&h=400&fit=crop" alt="Executive Chef Portrait">
+                </div>
+                <h2>Chef Marcus Laurent</h2>
+                <p class="chef-title">Executive Chef & Culinary Director</p>
+                <p class="chef-bio">With 28 years across Michelin three-star establishments in Lyon, Copenhagen, and Tokyo, Chef Laurent brings uncompromising excellence to every plate. A graduate of Le Cordon Bleu, he has worked alongside culinary masters including Thomas Keller and Alain Passard. His philosophy emphasizes ingredient integrity, precision technique, and the emotional storytelling inherent in gastronomy. Chef Laurent is a champion of sustainable sourcing and a mentor to emerging culinary talent globally.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESERVATION SECTION -->
+    <section class="reservation" id="reservations">
+        <div class="container">
+            <div class="reservation-container">
+                <h2>Reserve Your Experience</h2>
+                <form id="reservationForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your name">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="+1 (555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label for="guests">Guests</label>
+                            <select id="guests" name="guests" required>
+                                <option value="">Select number</option>
+                                <option value="1">1 Guest</option>
+                                <option value="2">2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                                <option value="5">5 Guests</option>
+                                <option value="6">6+ Guests</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="time" id="time" name="time" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="request">Special Requests</label>
+                        <textarea id="request" name="request" placeholder="Allergies, preferences, celebrations..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Confirm Reservation</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2>Guest Reviews</h2>
+                <p>Share your culinary experience with us</p>
+            </div>
+            <div class="reviews-container">
+                <div class="reviews-form">
+                    <h3>Leave Your Review</h3>
+                    <form id="reviewForm">
+                        <div class="form-group">
+                            <label for="reviewName">Your Name</label>
+                            <input type="text" id="reviewName" name="reviewName" required placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="star-rating" id="starRating">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                            <input type="hidden" id="ratingValue" name="rating" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewComment">Your Review</label>
+                            <textarea id="reviewComment" name="comment" required placeholder="Share your dining experience..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5vw, 3.5rem); text-align: center; margin-bottom: 3rem; color: var(--cream); font-weight: 700;">Contact & Hours</h2>
+            <div class="contact-grid">
+                <div class="contact-info reveal">
+                    <h3>Location</h3>
+                    <div class="contact-item">
+                        <h4>Address</h4>
+                        <p>1725 Gastronomy Boulevard<br>Metropolitan Fine Arts District<br>New York, NY 10021</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Phone</h4>
+                        <p><a href="tel:+12125551234" style="color: var(--accent-gold); text-decoration: none;">+1 (212) 555-1234</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Email</h4>
+                        <p><a href="mailto:hello@RESTAURANT.dining" style="color: var(--accent-gold); text-decoration: none;">hello@RESTAURANT.dining</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Hours</h4>
+                        <p>Tuesday - Thursday: 5:00 PM - 10:30 PM<br>Friday - Saturday: 5:00 PM - 11:00 PM<br>Sunday: 5:00 PM - 10:00 PM<br>Closed Mondays</p>
+                    </div>
+                </div>
+                <div class="contact-form reveal">
+                    <h3>Get In Touch</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="contactName">Name</label>
+                            <input type="text" id="contactName" name="contactName" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" name="contactEmail" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" name="contactMessage" required placeholder="Your message..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Dining</h4>
+                    <a href="#about">About RESTAURANT</a>
+                    <a href="#chef">Meet the Chef</a>
+                    <a href="#menu">Menu</a>
+                    <a href="#reservations">Reservations</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Experience</h4>
+                    <a href="#reviews">Reviews</a>
+                    <a href="#contact">Contact</a>
+                    <a href="tel:+12125551234">Call (212) 555-1234</a>
+                    <a href="mailto:hello@RESTAURANT.dining">Email Us</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow</h4>
+                    <div class="social-icons">
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RESTAURANT Restaurant & Café. All rights reserved. | Culinary Excellence Curated.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Success</h3>
+            <p id="modalMessage">Thank you for your submission.</p>
+            <button class="modal-close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // NAVBAR SCROLL EFFECT
+        const navbar = document.getElementById('navbar');
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // HAMBURGER MENU
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // CLOSE MENU ON LINK CLICK
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // ACTIVE NAV LINK
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // SCROLL REVEAL ANIMATION WITH STAGGER
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -80px 0px'
+        };
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(element => {
+            observer.observe(element);
+        });
+
+        // MODAL FUNCTIONS WITH ENHANCED ANIMATIONS
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        function showModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // RESERVATION FORM VALIDATION & SUBMISSION
+        document.getElementById('reservationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            
+            showModal(
+                'Reservation Request Received',
+                `Thank you, ${name}! Your reservation request for ${date} at ${time} has been received. Please note: The reservation system is a demo. A live booking system can be integrated using OpenTable, Resy, or a custom backend service.`
+            );
+            document.getElementById('reservationForm').reset();
+        });
+
+        // REVIEW FORM WITH STAR RATING
+        const starRating = document.getElementById('starRating');
+        const ratingValue = document.getElementById('ratingValue');
+
+        starRating.addEventListener('click', (e) => {
+            if (e.target.classList.contains('star')) {
+                const value = e.target.dataset.value;
+                ratingValue.value = value;
+
+                document.querySelectorAll('.star').forEach((star, index) => {
+                    if (index < value) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+        starRating.addEventListener('mouseover', (e) => {
+            if (e.target.classList.contains('star')) {
+                const value = e.target.dataset.value;
+                document.querySelectorAll('.star').forEach((star, index) => {
+                    if (index < value) {
+                        star.style.opacity = '1';
+                    } else {
+                        star.style.opacity = '0.3';
+                    }
+                });
+            }
+        });
+
+        starRating.addEventListener('mouseout', () => {
+            document.querySelectorAll('.star').forEach(star => {
+                star.style.opacity = '1';
+            });
+        });
+
+        document.getElementById('reviewForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reviewName').value;
+            const rating = ratingValue.value;
+
+            if (rating === '0') {
+                showModal('Rating Required', 'Please select a star rating before submitting your review.');
+                return;
+            }
+
+            showModal(
+                'Thank You for Your Review',
+                `${name}, your ${rating}-star review has been submitted! Note: This is a demo. A backend database would be needed to permanently store customer reviews.`
+            );
+            document.getElementById('reviewForm').reset();
+            document.querySelectorAll('.star').forEach(star => star.classList.remove('active'));
+            ratingValue.value = '0';
+        });
+
+        // CONTACT FORM SUBMISSION
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+
+            showModal(
+                'Message Received',
+                `Thank you, ${name}! We have received your message at ${email}. Our team will respond within 24 hours. Note: This is a demo. A backend email service would be required for live functionality.`
+            );
+            document.getElementById('contactForm').reset();
+        });
+
+        // CLOSE MODAL INTERACTIONS
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // CLOSE MODAL ON ESCAPE KEY
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+
+        // BUTTON RIPPLE EFFECT
+        document.querySelectorAll('.btn, .btn-submit').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // LAZY LOADING IMAGES
+        document.querySelectorAll('img').forEach(img => {
+            img.loading = 'lazy';
+        });
+
+        // SMOOTH SCROLL FOR OLDER BROWSERS
+        if (!window.CSS || !window.CSS.supports('scroll-behavior', 'smooth')) {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#' && document.querySelector(href)) {
+                        e.preventDefault();
+                        document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+
+        // FORM INPUT FOCUS EFFECTS
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // PARALLAX EFFECT ON HERO
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero && scrolled < hero.offsetHeight) {
+                hero.style.backgroundPosition = `center ${scrolled * 0.5}px`;
+            }
+        });
+
+        // PAGE LOAD ANIMATION
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '1';
+        });
+
+        console.log('RESTAURANTWebsite - Professional Edition 2026');
+    </script>
+</body>
+</html>
