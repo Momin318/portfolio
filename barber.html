@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BARBER — Modern Barbershop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --ink:        #080810;
+  --void:       #0c0c14;
+  --dark:       #11111a;
+  --panel:      #181822;
+  --surface:    #22222e;
+  --rim:        rgba(255,255,255,0.06);
+  --rim-hover:  rgba(255,255,255,0.12);
+  --muted:      #55556a;
+  --mid:        #8888a0;
+  --light:      #c8c8dc;
+  --white:      #f0f0f8;
+  --blue:       #4a7af5;
+  --blue-dim:   rgba(74,122,245,0.15);
+  --blue-glow:  rgba(74,122,245,0.4);
+  --navy:       #1a2a5e;
+
+  --font-disp:  'Playfair Display', Georgia, serif;
+  --font-ui:    'DM Sans', system-ui, sans-serif;
+  --font-mono:  'Space Mono', monospace;
+
+  --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-back:  cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --r1: 4px;
+  --r2: 10px;
+  --r3: 18px;
+  --r4: 28px;
+
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.4);
+  --shadow-md:  0 8px 32px rgba(0,0,0,0.5);
+  --shadow-lg:  0 24px 64px rgba(0,0,0,0.6);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  background: var(--ink);
+  color: var(--light);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+ 
+}
+img { display: block; width: 100%; object-fit: cover; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button, input, select, textarea {
+  font-family: inherit; font-size: inherit;
+  border: none; outline: none; background: none; color: inherit;
+}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
+::selection { background: var(--blue); color: #fff; }
+
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.container { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+.section { padding: 130px 0; position: relative; }
+
+.label {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: 22px;
+}
+.label::before {
+  content: ''; display: block;
+  width: 28px; height: 1px; background: var(--blue);
+}
+
+.heading {
+  font-family: var(--font-disp);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 700; line-height: 1.08;
+  color: var(--white);
+}
+.heading em { font-style: italic; font-weight: 400; }
+.sub {
+  font-size: 1rem; color: var(--mid);
+  line-height: 1.8; max-width: 500px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 28px; border-radius: var(--r1);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  position: relative; overflow: hidden;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-fill {
+  background: var(--blue); color: #fff;
+  box-shadow: 0 0 0 0 var(--blue-glow);
+}
+.btn-fill:hover { box-shadow: 0 0 40px var(--blue-glow); }
+.btn-ghost {
+  border: 1px solid var(--rim-hover); color: var(--light);
+  backdrop-filter: blur(12px);
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
+
+/* Reveal */
+.rv {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.rv.on { opacity: 1; transform: none; }
+.rv-d1 { transition-delay: 0.1s; }
+.rv-d2 { transition-delay: 0.2s; }
+.rv-d3 { transition-delay: 0.3s; }
+.rv-d4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  padding: 26px 0;
+  transition: padding 0.4s var(--ease), background 0.4s, border-color 0.4s;
+  border-bottom: 1px solid transparent;
+}
+#nav.stuck {
+  padding: 14px 0;
+  background: rgba(8,8,16,0.85);
+  backdrop-filter: blur(28px) saturate(1.5);
+  border-color: var(--rim);
+}
+.nav-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--font-mono); font-size: 17px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--white);
+}
+.nav-logo sup {
+  font-size: 9px; letter-spacing: 0.06em; color: var(--blue);
+  vertical-align: super; margin-left: 3px;
+}
+.nav-links { display: flex; align-items: center; gap: 34px; }
+.nav-links a {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--mid);
+  transition: color 0.25s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--blue);
+  transition: width 0.3s var(--ease);
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.active { color: var(--white); }
+.nav-links a.active::after { width: 100%; }
+
+.nav-book {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--blue);
+  border: 1px solid rgba(74,122,245,0.4);
+  border-radius: var(--r1); padding: 9px 20px;
+  transition: all 0.25s;
+}
+.nav-book:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; }
+.hamburger span {
+  display: block; width: 22px; height: 1.5px; background: var(--light);
+  transition: all 0.3s var(--ease); transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile overlay */
+.mobile-nav {
+  display: none; position: fixed; inset: 0; z-index: 850;
+  background: rgba(8,8,16,0.98); backdrop-filter: blur(24px);
+  flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav a {
+  font-family: var(--font-disp); font-size: 3rem; font-weight: 400;
+  color: var(--white); letter-spacing: 0.02em;
+  transition: color 0.2s; opacity: 0.85;
+}
+.mobile-nav a:hover { color: var(--blue); opacity: 1; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero {
+  height: 100svh; min-height: 660px;
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+}
+
+.hero-bg-img {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-bg-img img {
+  height: 100%; object-position: center 20%;
+  filter: brightness(0.22) saturate(0.6);
+}
+/* Layered overlays for the luxury depth */
+.hero-bg-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to right, rgba(8,8,16,0.95) 40%, rgba(8,8,16,0.3) 100%),
+    linear-gradient(to top, rgba(8,8,16,0.9) 0%, transparent 50%);
+}
+
+/* Animated noise grain */
+.hero-noise {
+  position: absolute; inset: 0; z-index: 1; opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Grid lines */
+.hero-grid {
+  position: absolute; inset: 0; z-index: 1;
+  background-image:
+    linear-gradient(rgba(74,122,245,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,122,245,0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative; z-index: 5;
+  max-width: 760px;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 14px 7px 7px;
+  border: 1px solid var(--rim-hover);
+  border-radius: 100px; backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 32px;
+  animation: fadeSlide 0.9s var(--ease) 0.2s both;
+}
+.hero-tag-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--blue); display: flex; align-items: center; justify-content: center;
+}
+.hero-tag-dot svg { width: 10px; height: 10px; fill: white; }
+.hero-tag-text {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--mid);
+}
+
+.hero-title {
+  font-family: var(--font-disp);
+  font-size: clamp(3.2rem, 8vw, 7rem);
+  font-weight: 700; line-height: 0.98;
+  color: var(--white); margin-bottom: 28px;
+  animation: fadeSlide 0.9s var(--ease) 0.4s both;
+}
+.hero-title .outline {
+  -webkit-text-stroke: 1px rgba(255,255,255,0.35);
+  color: transparent; display: block;
+}
+.hero-title .italic { font-style: italic; font-weight: 400; }
+
+.hero-desc {
+  font-size: 1.05rem; color: var(--mid); line-height: 1.8;
+  max-width: 480px; margin-bottom: 48px;
+  animation: fadeSlide 0.9s var(--ease) 0.55s both;
+}
+.hero-cta {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  animation: fadeSlide 0.9s var(--ease) 0.7s both;
+}
+
+/* Floating badge */
+.hero-badge {
+  position: absolute; z-index: 6;
+  right: 7%; bottom: 15%;
+  animation: floatBadge 5s ease-in-out infinite;
+}
+.hero-badge-inner {
+  background: rgba(22,22,34,0.75);
+  border: 1px solid var(--rim-hover); backdrop-filter: blur(20px);
+  border-radius: var(--r3); padding: 18px 22px;
+  display: flex; flex-direction: column; gap: 14px;
+  min-width: 210px;
+}
+.badge-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.badge-icon {
+  width: 32px; height: 32px; border-radius: var(--r1);
+  background: var(--blue-dim); border: 1px solid rgba(74,122,245,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--blue); flex-shrink: 0;
+}
+.badge-lbl { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.badge-val { font-family: var(--font-mono); font-size: 13px; color: var(--white); margin-top: 1px; }
+.badge-sep { height: 1px; background: var(--rim); }
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #3ecf8e; display: inline-block;
+  margin-right: 6px; animation: livePulse 2s infinite;
+}
+
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%); z-index: 6;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: var(--muted); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  animation: fadeSlide 0.9s var(--ease) 1.1s both;
+}
+.scroll-track {
+  width: 1px; height: 56px;
+  background: linear-gradient(to bottom, var(--blue) 0%, transparent 100%);
+  position: relative; overflow: hidden;
+}
+.scroll-track::after {
+  content: ''; position: absolute; top: -100%; left: 0;
+  width: 100%; height: 100%;
+  background: white;
+  animation: scrollRun 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   MARQUEE STRIP
+   ============================================================ */
+.marquee-strip {
+  background: var(--dark); border-top: 1px solid var(--rim); border-bottom: 1px solid var(--rim);
+  overflow: hidden; padding: 18px 0;
+}
+.marquee-track {
+  display: flex; gap: 0; white-space: nowrap;
+  animation: marqueeScroll 28s linear infinite;
+}
+.marquee-item {
+  display: inline-flex; align-items: center; gap: 20px;
+  padding: 0 28px;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.marquee-item span { color: var(--blue); font-size: 14px; }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+#about { background: var(--void); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 90px; align-items: center;
+}
+.about-img-wrap { position: relative; }
+.about-img-main {
+  border-radius: var(--r3); overflow: hidden;
+  height: 580px; position: relative;
+  box-shadow: var(--shadow-lg);
+}
+.about-img-main img {
+  height: 100%; object-position: center top;
+  transition: transform 0.8s var(--ease);
+}
+.about-img-wrap:hover .about-img-main img { transform: scale(1.04); }
+
+/* Inset image */
+.about-img-inset {
+  position: absolute; bottom: -30px; right: -30px;
+  width: 180px; height: 220px; border-radius: var(--r2);
+  overflow: hidden; border: 4px solid var(--dark);
+  box-shadow: var(--shadow-md);
+  z-index: 2;
+}
+.about-img-inset img { height: 100%; object-position: center; }
+
+/* Vertical line accent */
+.about-img-wrap::before {
+  content: '';
+  position: absolute; top: 40px; left: -20px;
+  width: 1px; height: calc(100% - 80px);
+  background: linear-gradient(to bottom, transparent, var(--blue), transparent);
+  opacity: 0.4;
+}
+
+.about-text .heading { margin-bottom: 20px; }
+.about-text .sub { margin-bottom: 36px; }
+.about-body {
+  color: var(--mid); line-height: 1.85; font-size: 0.95rem;
+  margin-bottom: 44px;
+}
+.about-body p + p { margin-top: 16px; }
+.feat-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.feat-card {
+  background: var(--panel);
+  border: 1px solid var(--rim);
+  border-radius: var(--r2); padding: 20px;
+  transition: all 0.35s var(--ease);
+  position: relative; overflow: hidden;
+}
+.feat-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--blue-dim), transparent);
+  opacity: 0; transition: opacity 0.35s;
+}
+.feat-card:hover { border-color: rgba(74,122,245,0.3); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.feat-card:hover::before { opacity: 1; }
+.feat-num {
+  font-family: var(--font-mono); font-size: 10px; color: var(--blue);
+  letter-spacing: 0.1em; margin-bottom: 10px;
+}
+.feat-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 5px; }
+.feat-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* ============================================================
+   STYLES / HAIRSTYLES
+   ============================================================ */
+#styles { background: var(--ink); }
+.styles-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 64px; gap: 40px;
+}
+.styles-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+}
+.style-card {
+  border-radius: var(--r3); overflow: hidden;
+  background: var(--panel); border: 1px solid var(--rim);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s, border-color 0.3s;
+  position: relative;
+}
+.style-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 32px 64px rgba(0,0,0,0.6);
+  border-color: rgba(74,122,245,0.25);
+}
+.style-img { height: 290px; overflow: hidden; position: relative; }
+.style-img img {
+  height: 100%; object-position: center top;
+  transition: transform 0.7s var(--ease);
+}
+.style-card:hover .style-img img { transform: scale(1.1); }
+.style-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(24,24,34,0.9) 0%, rgba(24,24,34,0) 55%);
+  z-index: 1;
+}
+.style-body { padding: 22px; }
+.style-badge {
+  display: inline-block; padding: 3px 11px; border-radius: 100px;
+  background: var(--blue-dim); border: 1px solid rgba(74,122,245,0.2);
+  color: var(--blue); font-family: var(--font-mono);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.style-name { font-family: var(--font-disp); font-size: 1.2rem; color: var(--white); margin-bottom: 6px; }
+.style-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+/* ============================================================
+   BOOKING
+   ============================================================ */
+#booking {
+  background: var(--void);
+  position: relative; overflow: hidden;
+}
+#booking::before {
+  content: '';
+  position: absolute; right: -180px; top: -180px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(74,122,245,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.booking-grid {
+  display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: start;
+}
+.booking-info { position: sticky; top: 120px; }
+.booking-info .heading { margin-bottom: 18px; }
+.booking-info .sub { margin-bottom: 36px; }
+.booking-perks { display: flex; flex-direction: column; gap: 14px; }
+.perk {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 14px; color: var(--mid);
+}
+.perk-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--blue-dim); border: 1px solid rgba(74,122,245,0.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.perk-dot svg { width: 10px; height: 10px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+.form-panel {
+  background: var(--panel);
+  border: 1px solid var(--rim); border-radius: var(--r3);
+  padding: 42px; box-shadow: var(--shadow-md);
+}
+.form-panel-title {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--rim);
+  display: flex; align-items: center; gap: 12px;
+}
+.form-panel-title::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
+}
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.f-group { margin-bottom: 16px; }
+.f-group label {
+  display: block; font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 9px;
+}
+.f-group input,
+.f-group select,
+.f-group textarea {
+  width: 100%;
+  background: var(--surface); border: 1px solid var(--rim);
+  border-radius: var(--r1); padding: 12px 15px;
+  color: var(--white); font-size: 14px;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  appearance: none; -webkit-appearance: none;
+}
+.f-group input::placeholder, .f-group textarea::placeholder { color: var(--muted); }
+
+.f-group select option { background: var(--panel); }
+.f-group input:focus, .f-group select:focus, .f-group textarea:focus {
+  border-color: var(--blue); background: rgba(74,122,245,0.05);
+  box-shadow: 0 0 0 3px rgba(74,122,245,0.15);
+}
+.f-group textarea { resize: vertical; min-height: 110px; }
+.f-submit {
+  width: 100%; margin-top: 8px; justify-content: center; padding: 15px;
+}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+#reviews { background: var(--dark); }
+.reviews-wrap {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.reviews-left .heading { margin-bottom: 18px; }
+.reviews-left .sub { margin-bottom: 40px; }
+
+.star-selector { display: flex; gap: 6px; margin-bottom: 6px; }
+.star-selector svg {
+  width: 28px; height: 28px;
+  stroke: var(--muted); fill: none; stroke-width: 1.5;
+  transition: stroke 0.15s, fill 0.15s, transform 0.2s var(--ease-back);
+}
+.star-selector svg.lit { stroke: #f5a623; fill: #f5a623; }
+.star-selector svg:hover { transform: scale(1.2); }
+
+.reviews-empty {
+  padding: 48px; border: 1px dashed var(--rim);
+  border-radius: var(--r3); text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.reviews-empty-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--rim);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 22px;
+}
+.reviews-empty p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+.reviews-empty-tag {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--blue);
+  border: 1px solid rgba(74,122,245,0.25); border-radius: 100px;
+  padding: 4px 14px;
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+#contact { background: var(--void); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.3fr; gap: 80px; align-items: start;
+}
+.contact-map {
+  border-radius: var(--r3); overflow: hidden; border: 1px solid var(--rim);
+  height: 220px; background: var(--panel);
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 36px; position: relative;
+}
+.contact-map-text {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); text-align: center;
+}
+.contact-map-text strong { display: block; color: var(--mid); margin-bottom: 4px; font-size: 12px; }
+
+/* Map grid */
+.contact-map::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(74,122,245,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,122,245,0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.contact-info-blocks { display: flex; flex-direction: column; gap: 22px; margin-top: 36px; }
+.contact-block {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 18px; border-radius: var(--r2);
+  border: 1px solid var(--rim); background: var(--panel);
+  transition: border-color 0.25s, transform 0.25s;
+}
+.contact-block:hover { border-color: rgba(74,122,245,0.3); transform: translateX(4px); }
+.contact-block-icon {
+  width: 40px; height: 40px; border-radius: var(--r1);
+  background: var(--blue-dim); border: 1px solid rgba(74,122,245,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.contact-block-icon svg { width: 16px; height: 16px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; }
+.cb-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+}
+.cb-value { font-size: 14px; color: var(--light); line-height: 1.5; }
+
+.hours-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.hours-table td { padding: 5px 0; color: var(--mid); }
+.hours-table td:last-child { text-align: right; color: var(--light); font-weight: 500; }
+.hours-table tr:not(:last-child) td { border-bottom: 1px solid var(--rim); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--ink); border-top: 1px solid var(--rim);
+  padding: 64px 0 28px;
+}
+.footer-inner {
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 60px; padding-bottom: 48px; border-bottom: 1px solid var(--rim);
+  margin-bottom: 28px;
+}
+.f-logo {
+  font-family: var(--font-mono); font-size: 16px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--white); margin-bottom: 14px;
+}
+.f-logo sup { font-size: 8px; color: var(--blue); }
+.f-brand-body { font-size: 13px; color: var(--muted); line-height: 1.75; max-width: 270px; }
+.f-socials { display: flex; gap: 10px; margin-top: 20px; }
+.f-social {
+  width: 36px; height: 36px; border-radius: var(--r1);
+  border: 1px solid var(--rim); background: var(--panel);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s;
+}
+.f-social:hover { background: var(--blue); border-color: var(--blue); }
+.f-social svg { width: 14px; height: 14px; stroke: var(--mid); fill: none; stroke-width: 2; stroke-linecap: round; transition: stroke 0.25s; }
+.f-social:hover svg { stroke: #fff; }
+.f-col-head {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--white);
+  margin-bottom: 20px;
+}
+.f-links { display: flex; flex-direction: column; gap: 12px; }
+.f-links a { font-size: 13px; color: var(--muted); transition: color 0.2s; }
+.f-links a:hover { color: var(--blue); }
+.footer-bot {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-copy { font-size: 12px; color: var(--muted); }
+.footer-bot-links { display: flex; gap: 22px; }
+.footer-bot-links a { font-size: 12px; color: var(--muted); transition: color 0.2s; }
+.footer-bot-links a:hover { color: var(--mid); }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-bg {
+  position: fixed; inset: 0; z-index: 9990;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-bg.show { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--panel); border: 1px solid var(--rim);
+  border-radius: var(--r3); padding: 52px 44px;
+  max-width: 480px; width: 100%; text-align: center;
+  position: relative;
+  transform: scale(0.92) translateY(16px);
+  transition: transform 0.4s var(--ease);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+}
+.modal-bg.show .modal-box { transform: none; }
+.modal-x {
+  position: absolute; top: 18px; right: 20px;
+  background: none; border: none; color: var(--muted);
+  font-size: 18px; transition: color 0.2s; line-height: 1;
+}
+.modal-x:hover { color: var(--white); }
+.modal-icon-wrap {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--blue-dim); border: 1px solid rgba(74,122,245,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+}
+.modal-icon-wrap svg { width: 26px; height: 26px; stroke: var(--blue); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.modal-title {
+  font-family: var(--font-disp); font-size: 1.9rem; font-weight: 700;
+  color: var(--white); margin-bottom: 14px;
+}
+.modal-msg { font-size: 14px; color: var(--mid); line-height: 1.75; margin-bottom: 32px; }
+.modal-close-btn { padding: 12px 32px; }
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+@keyframes scrollRun {
+  0%   { top: -100%; }
+  100% { top: 100%; }
+}
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(62,207,142,0.5); }
+  50%       { box-shadow: 0 0 0 6px rgba(62,207,142,0); }
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1000px) {
+  .about-grid, .booking-grid, .reviews-wrap, .contact-grid { grid-template-columns: 1fr; gap: 52px; }
+  .about-img-inset { display: none; }
+  .booking-info { position: static; }
+  .styles-grid { grid-template-columns: 1fr 1fr; }
+  .hero-badge { display: none; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .styles-head { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 768px) {
+  .nav-links, .nav-book { display: none; }
+  .hamburger { display: flex; }
+  .section { padding: 90px 0; }
+  .styles-grid { grid-template-columns: 1fr; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .f-row { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 36px; }
+  .footer-bot { flex-direction: column; text-align: center; }
+  #cursor-dot, #cursor-ring, #mouse-glow { display: none; }
+  body { cursor: auto; }
+  button, input, select, textarea, a { cursor: auto; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: 2.7rem; }
+  .form-panel { padding: 28px 20px; }
+  .modal-box { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav id="nav">
+  <div class="container nav-wrap">
+    <a href="#hero" class="nav-logo">BARBER<sup>™</sup></a>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#styles">Styles</a></li>
+      <li><a href="#booking">Booking</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#booking" class="nav-book">Book Now</a>
+    <div class="hamburger" id="hamburger" role="button" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#hero" onclick="closeMobile()">Home</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#styles" onclick="closeMobile()">Styles</a>
+  <a href="#booking" onclick="closeMobile()">Booking</a>
+  <a href="#reviews" onclick="closeMobile()">Reviews</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="hero">
+  <div class="hero-bg-img">
+    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=80&fit=crop" alt="Barber" loading="eager">
+  </div>
+  <div class="hero-noise"></div>
+  <div class="hero-grid"></div>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <div class="hero-tag-dot">
+          <svg viewBox="0 0 12 12" fill="white"><path d="M6 1L7.5 4.5H11L8.25 6.75L9.25 10L6 8L2.75 10L3.75 6.75L1 4.5H4.5L6 1Z"/></svg>
+        </div>
+        
+      </div>
+      <h1 class="hero-title">
+        Precision Cuts.<br>
+        <span class="outline italic">Modern Style.</span>
+      </h1>
+      <p class="hero-desc">
+        A studio built for those who treat their appearance as a craft. Every appointment is a deliberate act of refinement.
+      </p>
+      <div class="hero-cta">
+        <a href="#booking" class="btn btn-fill">
+          Book Appointment
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+        </a>
+        <a href="#styles" class="btn btn-ghost">View Styles</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-badge">
+    <div class="hero-badge-inner">
+      <div class="badge-row">
+        <div class="badge-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 1"/></svg>
+        </div>
+        <div>
+          <div class="badge-lbl">Studio Status</div>
+          <div class="badge-val"><span class="live-dot"></span>Open Now</div>
+        </div>
+      </div>
+      <div class="badge-sep"></div>
+      <div class="badge-row">
+        <div class="badge-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="10" height="9" rx="1"/><path d="M9 1v4M5 1v4M2 7h10"/></svg>
+        </div>
+        <div>
+          <div class="badge-lbl">Next Available</div>
+          <div class="badge-val">2:30 PM Today</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+</section>
+
+<!-- ============================================================
+     MARQUEE
+     ============================================================ -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item"><span>—</span> Textured Crop</div>
+    <div class="marquee-item"><span>—</span> Low Fade</div>
+    <div class="marquee-item"><span>—</span> Burst Fade</div>
+    <div class="marquee-item"><span>—</span> Slick Back</div>
+    <div class="marquee-item"><span>—</span> Modern Mullet</div>
+    <div class="marquee-item"><span>—</span> Curly Fade</div>
+    <div class="marquee-item"><span>—</span> Hot Towel Shave</div>
+    <div class="marquee-item"><span>—</span> Beard Sculpt</div>
+    <div class="marquee-item"><span>—</span> Textured Crop</div>
+    <div class="marquee-item"><span>—</span> Low Fade</div>
+    <div class="marquee-item"><span>—</span> Burst Fade</div>
+    <div class="marquee-item"><span>—</span> Slick Back</div>
+    <div class="marquee-item"><span>—</span> Modern Mullet</div>
+    <div class="marquee-item"><span>—</span> Curly Fade</div>
+    <div class="marquee-item"><span>—</span> Hot Towel Shave</div>
+    <div class="marquee-item"><span>—</span> Beard Sculpt</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap rv">
+        <div class="about-img-main">
+          <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=900&q=80&fit=crop" alt="Barber at work" loading="lazy">
+        </div>
+        <div class="about-img-inset">
+          <img src="https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?w=400&q=80&fit=crop" alt="Barbershop tools" loading="lazy">
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="label rv">Our Story</div>
+        <h2 class="heading rv rv-d1">Where Craft<br>Meets <em>Character</em></h2>
+        <div class="about-body rv rv-d2">
+          <p>BARBER was built on a conviction that most people have never experienced a truly great barbershop. Not just skilled — but intentional, modern, and entirely attuned to who you are.</p>
+          <p>Every barber here trained under a philosophy of listening first. The result is a cut that fits your face, your style, and your life — not a template.</p>
+        </div>
+        <div class="feat-grid rv rv-d3">
+          <div class="feat-card">
+            <div class="feat-num">/ 01</div>
+            <div class="feat-title">Professional Service</div>
+            <div class="feat-body">A premium in-studio experience from first consultation to final look.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">/ 02</div>
+            <div class="feat-title">Skilled Grooming</div>
+            <div class="feat-body">Master-level technique applied with precision and care.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">/ 03</div>
+            <div class="feat-title">Modern Techniques</div>
+            <div class="feat-body">Classic fundamentals sharpened by contemporary methodology.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num">/ 04</div>
+            <div class="feat-title">Premium Experience</div>
+            <div class="feat-body">Every detail of the visit is considered and calibrated for you.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STYLES
+     ============================================================ -->
+<section id="styles" class="section">
+  <div class="container">
+    <div class="styles-head">
+      <div>
+        <div class="label rv">The Collection</div>
+        <h2 class="heading rv rv-d1">Trending<br><em>Hairstyles</em></h2>
+      </div>
+      <p class="sub rv rv-d2" style="max-width:380px;margin:0;">Six signature cuts our clients return for, each executed with meticulous craft.</p>
+    </div>
+    <div class="styles-grid">
+
+      <div class="style-card rv">
+        <div class="style-img">
+          <img src="https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?w=700&q=80&fit=crop" alt="Textured Crop" loading="lazy">
+          <div class="style-img-overlay"></div>
+        </div>
+        <div class="style-body">
+          <div class="style-badge">Trending</div>
+          <div class="style-name">Textured Crop</div>
+          <div class="style-desc">Short, sharp structure with defined surface texture and a clean, precise fade underneath.</div>
+        </div>
+      </div>
+
+      <div class="style-card rv rv-d1">
+        <div class="style-img">
+          <img src="https://images.unsplash.com/photo-1584679109597-c656b19974c9?w=700&q=80&fit=crop" alt="Low Fade" loading="lazy">
+          <div class="style-img-overlay"></div>
+        </div>
+        <div class="style-body">
+          <div class="style-badge">Classic</div>
+          <div class="style-name">Low Fade</div>
+          <div class="style-desc">A refined taper that blends seamlessly from skin to length, subtle and always polished.</div>
+        </div>
+      </div>
+
+      <div class="style-card rv rv-d2">
+        <div class="style-img">
+          <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=700&q=80&fit=crop" alt="Burst Fade" loading="lazy">
+          <div class="style-img-overlay"></div>
+        </div>
+        <div class="style-body">
+          <div class="style-badge">Bold</div>
+          <div class="style-name">Burst Fade</div>
+          <div class="style-desc">A radial arc behind the ear, geometric and intentional — confident in every angle.</div>
+        </div>
+      </div>
+
+      <div class="style-card rv">
+        <div class="style-img">
+          <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=700&q=80&fit=crop" alt="Slick Back" loading="lazy">
+          <div class="style-img-overlay"></div>
+        </div>
+        <div class="style-body">
+          <div class="style-badge">Timeless</div>
+          <div class="style-name">Slick Back</div>
+          <div class="style-desc">Swept clean with natural hold. Commanding presence without a single hair out of place.</div>
+        </div>
+      </div>
+
+      <div class="style-card rv rv-d1">
+        <div class="style-img">
+          <img src="https://images.unsplash.com/photo-1567894340315-735d7c361db0?w=700&q=80&fit=crop" alt="Modern Mullet" loading="lazy">
+          <div class="style-img-overlay"></div>
+        </div>
+        <div class="style-body">
+          <div class="style-badge">2026</div>
+          <div class="style-name">Modern Mullet</div>
+          <div class="style-desc">Cropped front, controlled length at the back — the tension between clean and character.</div>
+        </div>
+      </div>
+
+      <div class="style-card rv rv-d2">
+        <div class="style-img">
+          <img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=700&q=80&fit=crop" alt="Curly Fade" loading="lazy">
+          <div class="style-img-overlay"></div>
+        </div>
+        <div class="style-body">
+          <div class="style-badge">Textured</div>
+          <div class="style-name">Curly Fade</div>
+          <div class="style-desc">Natural curl definition on top, precision fade below — letting your texture own the room.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BOOKING
+     ============================================================ -->
+<section id="booking" class="section">
+  <div class="container">
+    <div class="booking-grid">
+      <div class="booking-info">
+        <div class="label rv">Appointments</div>
+        <h2 class="heading rv rv-d1">Reserve<br>Your Chair</h2>
+        <p class="sub rv rv-d2">Select a service, choose your time, arrive ready.</p>
+        <div class="booking-perks rv rv-d3">
+          <div class="perk">
+            <div class="perk-dot">
+              <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            Flexible scheduling, 7 days a week
+          </div>
+          <div class="perk">
+            <div class="perk-dot">
+              <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            Walk-ins welcome when available
+          </div>
+          <div class="perk">
+            <div class="perk-dot">
+              <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            Free style consultation included
+          </div>
+          <div class="perk">
+            <div class="perk-dot">
+              <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            Easy rescheduling, no fees
+          </div>
+        </div>
+      </div>
+
+      <div class="rv rv-d2">
+        <div class="form-panel">
+          <div class="form-panel-title">New Appointment</div>
+          <form onsubmit="openModal(event,'booking')">
+            <div class="f-row">
+              <div class="f-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Your full name">
+              </div>
+              <div class="f-group">
+                <label>Phone</label>
+                <input type="tel" placeholder="+1 (555) 000-0000">
+              </div>
+            </div>
+            <div class="f-group">
+              <label>Service</label>
+              <select>
+                <option value="">Select a service</option>
+                <option>Classic Haircut — $35</option>
+                <option>Haircut + Beard Trim — $50</option>
+                <option>Fade & Style — $45</option>
+                <option>Hot Towel Shave — $40</option>
+                <option>Full Grooming Package — $75</option>
+              </select>
+            </div>
+            <div class="f-row">
+              <div class="f-group">
+                <label>Date</label>
+                <input type="date">
+              </div>
+              <div class="f-group">
+                <label>Time</label>
+                <select>
+                  <option value="">Select time</option>
+                  <option>9:00 AM</option><option>10:00 AM</option>
+                  <option>11:00 AM</option><option>12:00 PM</option>
+                  <option>1:00 PM</option><option>2:00 PM</option>
+                  <option>3:00 PM</option><option>4:00 PM</option>
+                  <option>5:00 PM</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-fill f-submit">
+              Confirm Appointment
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     REVIEWS
+     ============================================================ -->
+<section id="reviews" class="section">
+  <div class="container">
+    <div class="reviews-wrap">
+      <div class="reviews-left">
+        <div class="label rv">Feedback</div>
+        <h2 class="heading rv rv-d1">Leave a<br><em>Review</em></h2>
+        <p class="sub rv rv-d2">Visited recently? Share your experience with the community.</p>
+
+        <div class="form-panel rv rv-d3" style="margin-top:40px;">
+          <div class="form-panel-title">Your Review</div>
+          <form onsubmit="openModal(event,'review')">
+            <div class="f-group">
+              <label>Your Name</label>
+              <input type="text" placeholder="First name">
+            </div>
+            <div class="f-group">
+              <label>Rating</label>
+              <div class="star-selector" id="starSelector">
+                <svg viewBox="0 0 24 24" data-val="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" data-val="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" data-val="3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" data-val="4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24" data-val="5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+            <div class="f-group">
+              <label>Your Review</label>
+              <textarea placeholder="Tell us about your visit..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-fill f-submit">
+              Submit Review
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="rv rv-d2" style="margin-top: 140px;">
+        <div class="reviews-empty">
+          <div class="reviews-empty-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M11 2a9 9 0 110 18A9 9 0 0111 2z"/><path d="M8 12s.75 2 3 2 3-2 3-2M9 9h.01M13 9h.01"/></svg>
+          </div>
+          <h3 style="font-family:var(--font-disp);font-size:1.3rem;color:var(--light);font-weight:400;">Customer reviews appear here</h3>
+          <p>Once connected to a backend, verified client reviews will display in this space. Be the first to leave yours.</p>
+          <span class="reviews-empty-tag">Backend Required</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <div class="label rv">Find Us</div>
+        <h2 class="heading rv rv-d1">Get in<br><em>Touch</em></h2>
+        <div class="contact-info-blocks rv rv-d2">
+          <div class="contact-block">
+            <div class="contact-block-icon">
+              <svg viewBox="0 0 18 18"><path d="M15 12.5c0 .5-.1 1-.4 1.5-.3.5-.6.9-1 1.2-.7.7-1.5 1-2.4 1-1 0-2-.3-3.2-1a20 20 0 01-3-2.2A19 19 0 013 9.5C2.3 8.3 2 7.3 2 6.3c0-.9.3-1.7 1-2.4.7-.7 1.5-1 2.3-1 .3 0 .6 0 .8.2.3.1.5.3.7.6l2.4 3.4c.2.3.4.5.4.7 0 .3-.1.5-.3.7l-.8.8a.3.3 0 00-.1.2c0 .1 0 .2.1.3.4.7.9 1.3 1.5 1.9.6.6 1.2 1.1 1.9 1.5.1.1.2.1.3.1.1 0 .2 0 .3-.1l.8-.8c.2-.2.4-.3.7-.3.2 0 .4.1.6.4l3.5 2.4c.3.2.5.4.6.7z" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="cb-label">Phone</div>
+              <div class="cb-value">+1 (555) 000-0000<br><span style="font-size:12px;color:var(--muted);">Live number connects here</span></div>
+            </div>
+          </div>
+          <div class="contact-block">
+            <div class="contact-block-icon">
+              <svg viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="10" rx="1.5"/><path d="M2 6l7 5 7-5"/></svg>
+            </div>
+            <div>
+              <div class="cb-label">Email</div>
+              <div class="cb-value">hello@BARBERcuts.com</div>
+            </div>
+          </div>
+          <div class="contact-block">
+            <div class="contact-block-icon">
+              <svg viewBox="0 0 18 18"><path d="M9 1a6 6 0 016 6c0 4-6 10-6 10S3 11 3 7a6 6 0 016-6z"/><circle cx="9" cy="7" r="2"/></svg>
+            </div>
+            <div>
+              <div class="cb-label">Address</div>
+              <div class="cb-value">123 Studio Street, Suite 1<br>New York, NY 10001</div>
+            </div>
+          </div>
+          <div class="contact-block" style="flex-direction:column;align-items:flex-start;">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
+              <div class="contact-block-icon">
+                <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M9 5v4l2.5 2.5"/></svg>
+              </div>
+              <div class="cb-label" style="margin:0;">Business Hours</div>
+            </div>
+            <table class="hours-table">
+              <tr><td>Monday – Friday</td><td>9:00 AM – 7:00 PM</td></tr>
+              <tr><td>Saturday</td><td>9:00 AM – 6:00 PM</td></tr>
+              <tr><td>Sunday</td><td>10:00 AM – 4:00 PM</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="contact-map">
+          <div class="contact-map-text">
+            <strong>Studio Location</strong>
+            123 Studio Street, New York
+          </div>
+        </div>
+      </div>
+
+      <div class="rv rv-d2">
+        <div class="form-panel" style="margin-top:0;">
+          <div class="form-panel-title">Send a Message</div>
+          <form onsubmit="openModal(event,'contact')">
+            <div class="f-group">
+              <label>Your Name</label>
+              <input type="text" placeholder="Full name">
+            </div>
+            <div class="f-group">
+              <label>Email Address</label>
+              <input type="email" placeholder="you@example.com">
+            </div>
+            <div class="f-group">
+              <label>Message</label>
+              <textarea placeholder="How can we help?" style="min-height:150px;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-fill f-submit">
+              Send Message
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l4 2.5L8 12l4-10z"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="f-logo">BARBER<sup>™</sup></div>
+        <p class="f-brand-body">A premium grooming studio for those who treat their appearance as a craft. Book your session today.</p>
+        <div class="f-socials">
+          <a href="#" class="f-social" aria-label="Instagram">
+            <svg viewBox="0 0 18 18"><rect x="3" y="3" width="12" height="12" rx="3"/><circle cx="9" cy="9" r="3"/><circle cx="13" cy="5" r="0.5" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="f-social" aria-label="TikTok">
+            <svg viewBox="0 0 18 18"><path d="M12 2v9a4 4 0 11-4-4h1V5h-1a6 6 0 106 6V4h-1a3 3 0 01-3-3h-1" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" class="f-social" aria-label="X">
+            <svg viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15"/></svg>
+          </a>
+          <a href="#" class="f-social" aria-label="Facebook">
+            <svg viewBox="0 0 18 18"><path d="M10 3H8a3 3 0 00-3 3v1H3v3h2v5h3v-5h2l1-3h-3V6a1 1 0 011-1h2V3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="f-col-head">Navigation</div>
+        <div class="f-links">
+          <a href="#hero">Home</a>
+          <a href="#about">About</a>
+          <a href="#styles">Hairstyles</a>
+          <a href="#booking">Book Now</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="f-col-head">Services</div>
+        <div class="f-links">
+          <a href="#booking">Classic Haircut</a>
+          <a href="#booking">Fade & Style</a>
+          <a href="#booking">Beard Trim</a>
+          <a href="#booking">Hot Towel Shave</a>
+          <a href="#booking">Full Package</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <div class="footer-copy">© 2026 BARBER Studio. All rights reserved. Demo website — frontend only.</div>
+      <div class="footer-bot-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MODAL
+     ============================================================ -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closeModal()" aria-label="Close">&#x2715;</button>
+    <div class="modal-icon-wrap">
+      <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="10"/><path d="M14 10v4M14 18h.01"/></svg>
+    </div>
+    <div class="modal-title" id="modalTitle">Demo Notice</div>
+    <p class="modal-msg" id="modalMsg">This feature is unavailable in the demo.</p>
+    <button class="btn btn-fill modal-close-btn" onclick="closeModal()">
+      Understood
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7l3 3 7-7"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+
+/* ---- NAV ---- */
+const nav = document.getElementById('nav');
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = document.querySelectorAll('section[id]');
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('stuck', window.scrollY > 50);
+
+  // Active link
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+/* ---- HAMBURGER ---- */
+const hbg = document.getElementById('hamburger');
+const mob = document.getElementById('mobileNav');
+hbg.addEventListener('click', () => {
+  hbg.classList.toggle('open');
+  mob.classList.toggle('open');
+  document.body.style.overflow = mob.classList.contains('open') ? 'hidden' : '';
+});
+function closeMobile() {
+  hbg.classList.remove('open'); mob.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ---- REVEAL ---- */
+const rvEls = document.querySelectorAll('.rv');
+const rvObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.1 });
+rvEls.forEach(el => rvObs.observe(el));
+
+/* ---- STAR RATING ---- */
+const stars = document.querySelectorAll('#starSelector svg');
+let selectedStar = 0;
+stars.forEach(star => {
+  star.addEventListener('mouseenter', () => {
+    const v = +star.dataset.val;
+    stars.forEach(s => s.classList.toggle('lit', +s.dataset.val <= v));
+  });
+  star.addEventListener('mouseleave', () => {
+    stars.forEach(s => s.classList.toggle('lit', +s.dataset.val <= selectedStar));
+  });
+  star.addEventListener('click', () => {
+    selectedStar = +star.dataset.val;
+    stars.forEach(s => s.classList.toggle('lit', +s.dataset.val <= selectedStar));
+  });
+});
+
+/* ---- MODAL ---- */
+const modalBg = document.getElementById('modalBg');
+const modalMsgs = {
+  booking: {
+    title: 'Booking Unavailable',
+    msg: 'Booking functionality is disabled in this demo version. A live booking system can be connected using a backend service or scheduling platform such as Acuity, Calendly, or a custom API.'
+  },
+  review: {
+    title: 'Reviews Unavailable',
+    msg: 'Review submission is disabled in this demo version. A backend database is required to store and display customer reviews.'
+  },
+  contact: {
+    title: 'Contact Unavailable',
+    msg: 'Contact functionality is disabled in this demo version. A backend service or email provider is required to receive and route messages.'
+  }
+};
+function openModal(e, type) {
+  e.preventDefault();
+  document.getElementById('modalTitle').textContent = modalMsgs[type].title;
+  document.getElementById('modalMsg').textContent   = modalMsgs[type].msg;
+  modalBg.classList.add('show');
+}
+function closeModal() { modalBg.classList.remove('show'); }
+modalBg.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ---- 3D TILT on style cards ---- */
+document.querySelectorAll('.style-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transform = `translateY(-8px) scale(1.01) rotateY(${x*10}deg) rotateX(${-y*6}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.5s cubic-bezier(0.22,1,0.36,1)';
+    setTimeout(() => card.style.transition = '', 500);
+  });
+});
+
+/* ---- FEAT CARD TILT ---- */
+document.querySelectorAll('.feat-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    card.style.transform = `translateY(-3px) rotateY(${x*8}deg) rotateX(${-y*5}deg)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+</script>
+</body>
+</html>
