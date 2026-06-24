@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Clinic — Unhurried Care, Modern Medicine</title>
+<meta name="description" content=" Clinic is a private general and family medicine practice focused on attentive, unhurried care.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230F2A40'/%3E%3Cpath d='M4 17h5l2.5-7L15 23l2.5-9 1.5 3h9' stroke='%234FA897' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ROOT / TOKENS
+============================================================ */
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --white:#FFFFFF;
+  --cream:#E3D6B5;
+  --mist-50:#EFE6CE;
+  --mist-100:#E9DEBE;
+  --silver:#D8C9A4;
+  --silver-strong:#C2AF82;
+  --ink:#21262A;
+  --ink-soft:#5C655E;
+  --navy:#21403D;
+  --navy-deep:#13231F;
+  --navy-soft:rgba(33,64,61,0.78);
+  --blue-muted:#5D7A82;
+  --teal:#6FA88F;
+  --teal-dark:#4F8270;
+  --teal-soft:#E8EFE7;
+  --mint:#D9E8DC;
+  --radius-sm:10px;
+  --radius-md:18px;
+  --radius-lg:30px;
+  --shadow-sm:0 2px 14px rgba(15,42,64,0.07);
+  --shadow-md:0 14px 34px rgba(15,42,64,0.11);
+  --shadow-lg:0 28px 64px rgba(8,24,33,0.20);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --container:1240px;
+  --gap:clamp(16px,2vw,28px);
+  --section-pad:clamp(72px,10vw,128px);
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important;}
+}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  color:var(--ink);
+  background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  color:var(--navy);
+  line-height:1.12;
+  margin:0;
+  letter-spacing:-0.01em;
+}
+p{margin:0;color:var(--ink-soft);line-height:1.7;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+button{font-family:inherit;cursor:pointer;}
+ul{margin:0;padding:0;list-style:none;}
+input,select,textarea{font-family:'Inter',sans-serif;}
+
+.mono{
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.74rem;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--teal-dark);
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:'';
+  width:18px;height:1px;
+  background:var(--teal-dark);
+  display:inline-block;
+}
+.eyebrow--on-dark{color:var(--mint);}
+.eyebrow--on-dark::before{background:var(--mint);}
+
+.wrap{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:0 clamp(20px,5vw,48px);
+}
+.section{padding:var(--section-pad) 0;position:relative;}
+.section--alt{background:var(--mist-50);}
+.section--dark{background:var(--navy);}
+.section-head{max-width:640px;margin-bottom:clamp(40px,6vw,64px);}
+.section-head h2{font-size:clamp(1.9rem,3.4vw,2.7rem);}
+.section-head p{margin-top:16px;font-size:1.04rem;max-width:540px;}
+
+/* reveal */
+[data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+[data-reveal].is-visible{opacity:1;transform:translateY(0);}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 30px;border-radius:999px;border:1px solid transparent;
+  font-size:0.95rem;font-weight:600;letter-spacing:0.01em;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
+  white-space:nowrap;
+}
+.btn:active{transform:scale(0.97);}
+.btn--primary{background:var(--navy);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn--primary:hover{background:var(--teal-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn--outline{background:transparent;color:var(--navy);border-color:var(--silver-strong);}
+.btn--outline:hover{border-color:var(--navy);transform:translateY(-2px);}
+.btn--on-dark{border-color:rgba(255,255,255,0.35);color:var(--white);}
+.btn--on-dark:hover{border-color:var(--teal);background:rgba(255,255,255,0.06);}
+.btn--block{width:100%;}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--teal-dark);outline-offset:3px;
+}
+
+/* ============================================================
+   LOADER
+============================================================ */
+#loader{
+  position:fixed;inset:0;background:var(--navy);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:999;transition:opacity .6s var(--ease),visibility .6s var(--ease);
+}
+#loader.is-hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.loader__mark{font-family:'Fraunces',serif;color:var(--white);font-size:1.6rem;letter-spacing:0.02em;margin-bottom:18px;}
+.loader__line{width:160px;height:2px;background:rgba(255,255,255,0.16);border-radius:2px;overflow:hidden;}
+.loader__line span{display:block;height:100%;width:40%;background:var(--teal);animation:loaderMove 1.1s ease-in-out infinite;}
+@keyframes loaderMove{0%{transform:translateX(-100%);}100%{transform:translateX(260%);}}
+
+/* cursor glow */
+#cursor-glow{
+  position:fixed;top:0;left:0;width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle, rgba(79,168,151,0.16), rgba(79,168,151,0) 70%);
+  transform:translate(-50%,-50%);pointer-events:none;z-index:2;
+  opacity:0;transition:opacity .4s ease;will-change:transform;
+}
+#cursor-glow.is-active{opacity:1;}
+
+/* pulse divider (signature motif) */
+.pulse{display:block;width:100%;overflow:hidden;}
+.pulse svg{display:block;width:100%;height:auto;}
+.pulse path{
+  fill:none;stroke-width:2;
+  stroke-dasharray:1600;stroke-dashoffset:1600;
+  transition:stroke-dashoffset 1.8s var(--ease);
+}
+.pulse.is-visible path{stroke-dashoffset:0;}
+.pulse--quiet{height:40px;opacity:0.55;}
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:22px 0;transition:padding .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease),backdrop-filter .4s var(--ease);
+}
+.nav__inner{
+  max-width:var(--container);margin:0 auto;padding:0 clamp(20px,5vw,48px);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.nav__logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.28rem;font-weight:600;color:var(--white);}
+.nav__logo svg{width:30px;height:30px;flex-shrink:0;}
+.nav__links{display:flex;align-items:center;gap:34px;}
+.nav__link{font-size:0.92rem;font-weight:500;color:rgba(255,255,255,0.82);position:relative;padding:4px 0;transition:color .3s var(--ease);}
+.nav__link::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1.5px;background:var(--teal);transition:width .35s var(--ease);}
+.nav__link:hover,.nav__link.is-active{color:var(--white);}
+.nav__link:hover::after,.nav__link.is-active::after{width:100%;}
+.nav__right{display:flex;align-items:center;gap:18px;}
+.nav__cta{padding:12px 24px;font-size:0.88rem;}
+.nav__cta--mobile{display:none;}
+.nav__toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:34px;height:34px;background:none;border:none;padding:0;}
+.nav__toggle span{display:block;width:100%;height:1.6px;background:var(--white);border-radius:2px;transition:transform .35s var(--ease),opacity .35s var(--ease);}
+
+.nav.is-scrolled{
+  padding:14px 0;background:rgba(15,42,64,0.72);backdrop-filter:blur(16px) saturate(140%);
+  box-shadow:0 6px 24px rgba(8,24,33,0.18);
+}
+
+@media (max-width: 900px){
+  .nav__links{
+    position:fixed;top:0;right:0;height:100vh;width:min(78vw,360px);
+    background:var(--navy);flex-direction:column;align-items:flex-start;justify-content:center;
+    gap:28px;padding:0 40px;transform:translateX(100%);transition:transform .5s var(--ease);
+    box-shadow:-20px 0 60px rgba(0,0,0,0.25);
+  }
+  .nav__links.is-open{transform:translateX(0);}
+  .nav__link{font-size:1.1rem;}
+  .nav__cta{display:none;}
+  .nav__links .nav__cta--mobile{display:inline-flex;margin-top:10px;}
+  .nav__toggle{display:flex;}
+  .nav__toggle.is-open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  .nav__toggle.is-open span:nth-child(2){opacity:0;}
+  .nav__toggle.is-open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero{
+  position:relative;min-height:100vh;display:flex;align-items:center;
+  background:linear-gradient(180deg,var(--navy) 0%, var(--navy) 38%, var(--cream) 38%);
+  padding-top:120px;padding-bottom:60px;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-10%;right:-10%;width:60%;height:70%;
+  background:radial-gradient(circle, rgba(79,168,151,0.20), transparent 65%);
+  pointer-events:none;
+}
+.hero__grid{
+  max-width:var(--container);margin:0 auto;padding:0 clamp(20px,5vw,48px);
+  display:grid;grid-template-columns:1.05fr 0.95fr;gap:clamp(32px,5vw,64px);align-items:center;position:relative;z-index:2;
+}
+.hero__content{color:var(--white);}
+.hero__title{font-size:clamp(2.5rem,5.2vw,4rem);color:var(--white);}
+.hero__title em{font-style:normal;color:var(--mint);}
+.hero__sub{margin-top:22px;font-size:1.08rem;color:rgba(255,255,255,0.78);max-width:480px;}
+.hero__actions{display:flex;gap:16px;margin-top:36px;flex-wrap:wrap;}
+.hero__note{margin-top:26px;font-size:0.86rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:10px;}
+.hero__note svg{width:16px;height:16px;color:var(--teal);flex-shrink:0;}
+
+.hero__visual{position:relative;}
+.hero__frame{
+  position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);
+  aspect-ratio:4/4.6;
+}
+.hero__frame img{width:100%;height:100%;object-fit:cover;}
+.hero__frame::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,24,33,0) 55%, rgba(8,24,33,0.55) 100%);}
+
+.status-card{
+  position:absolute;left:-8%;bottom:-10%;width:min(290px,86%);
+  background:rgba(255,255,255,0.86);backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:var(--radius-md);padding:22px 24px;box-shadow:var(--shadow-lg);
+}
+.status-card__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.status-card__label{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
+.status-card__badge{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--teal-soft);color:var(--teal-dark);}
+.status-card__badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal-dark);}
+.status-card__badge.is-closed{background:var(--mist-100);color:var(--ink-soft);}
+.status-card__badge.is-closed::before{background:var(--ink-soft);}
+.status-card__time{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--navy);margin-bottom:4px;}
+.status-card__next{font-size:0.86rem;color:var(--ink-soft);}
+.status-card__next b{color:var(--navy);font-weight:600;}
+
+@media (max-width:980px){
+  .hero{padding-top:110px;}
+  .hero__grid{grid-template-columns:1fr;}
+  .hero__visual{order:-1;max-width:420px;margin:0 auto 20px;}
+  .status-card{left:50%;transform:translateX(-50%);bottom:-14%;}
+  .hero::before{display:none;}
+}
+
+/* ============================================================
+   ABOUT
+============================================================ */
+.about__grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:clamp(40px,6vw,72px);align-items:center;}
+.about__visual{position:relative;min-height:420px;}
+.about__img-main{position:absolute;top:0;left:0;width:78%;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);aspect-ratio:4/5;}
+.about__img-second{position:absolute;bottom:0;right:0;width:54%;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:5/4;border:6px solid var(--white);}
+.about__img-main img,.about__img-second img{width:100%;height:100%;object-fit:cover;}
+.about__copy p{font-size:1.02rem;margin-bottom:16px;}
+.about__copy p:last-of-type{margin-bottom:0;}
+.about__features{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.feature-card{background:var(--white);border:1px solid var(--silver);border-radius:var(--radius-md);padding:22px;transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s var(--ease);}
+.feature-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:transparent;}
+.feature-card__icon{width:38px;height:38px;border-radius:10px;background:var(--teal-soft);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.feature-card__icon svg{width:19px;height:19px;}
+.feature-card h4{font-size:1rem;color:var(--navy);margin-bottom:6px;}
+.feature-card p{font-size:0.88rem;}
+
+@media (max-width:980px){
+  .about__grid{grid-template-columns:1fr;}
+  .about__visual{min-height:340px;max-width:420px;margin:0 auto;}
+}
+@media (max-width:560px){
+  .about__features{grid-template-columns:1fr;}
+}
+
+/* ============================================================
+   SERVICES
+============================================================ */
+.services__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);}
+.service-card{
+  background:var(--white);border-radius:var(--radius-md);overflow:hidden;
+  border:1px solid var(--silver);transition:transform .45s var(--ease),box-shadow .45s var(--ease);
+}
+.service-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);}
+.service-card__media{aspect-ratio:5/4;overflow:hidden;}
+.service-card__media img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);}
+.service-card:hover .service-card__media img{transform:scale(1.08);}
+.service-card__body{padding:24px;}
+.service-card__line{width:28px;height:2px;background:var(--teal);margin-bottom:14px;transition:width .4s var(--ease);}
+.service-card:hover .service-card__line{width:54px;}
+.service-card h3{font-size:1.12rem;margin-bottom:8px;}
+.service-card p{font-size:0.92rem;}
+
+@media (max-width:980px){.services__grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:620px){.services__grid{grid-template-columns:1fr;}}
+
+/* ============================================================
+   FACILITIES (scroll-snap filmstrip)
+============================================================ */
+.facilities__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.facilities__nav{display:flex;gap:10px;}
+.facilities__nav button{
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--silver-strong);background:var(--white);
+  display:flex;align-items:center;justify-content:center;transition:background .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease);
+}
+.facilities__nav button:hover{background:var(--navy);border-color:var(--navy);transform:translateY(-2px);}
+.facilities__nav button:hover svg{color:var(--white);}
+.facilities__nav svg{width:18px;height:18px;color:var(--navy);}
+
+.facilities__track{
+  display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:36px 0 12px;margin:0 -4px;scrollbar-width:none;
+}
+.facilities__track::-webkit-scrollbar{display:none;}
+.facility-card{
+  scroll-snap-align:start;flex:0 0 auto;width:min(360px,78vw);
+  border-radius:var(--radius-lg);overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);
+  border:1px solid var(--silver);transition:box-shadow .4s var(--ease),transform .4s var(--ease);
+}
+.facility-card:hover{box-shadow:var(--shadow-md);transform:translateY(-4px);}
+.facility-card__media{aspect-ratio:4/3;overflow:hidden;}
+.facility-card__media img{width:100%;height:100%;object-fit:cover;}
+.facility-card__body{padding:22px 24px 26px;}
+.facility-card__index{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--teal-dark);letter-spacing:0.1em;margin-bottom:10px;display:block;}
+.facility-card h3{font-size:1.08rem;margin-bottom:8px;}
+.facility-card p{font-size:0.9rem;}
+
+/* ============================================================
+   TEAM
+============================================================ */
+.team__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);}
+.team-card{text-align:left;}
+.team-card__media{position:relative;border-radius:var(--radius-md);overflow:hidden;aspect-ratio:1/1;margin-bottom:18px;box-shadow:var(--shadow-sm);}
+.team-card__media img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease);}
+.team-card:hover .team-card__media img{transform:scale(1.06);}
+.team-card__specialty{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:6px;display:block;}
+.team-card h3{font-size:1.08rem;margin-bottom:8px;}
+.team-card p{font-size:0.88rem;}
+
+@media (max-width:980px){.team__grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.team__grid{grid-template-columns:1fr;max-width:340px;margin:0 auto;}}
+
+/* ============================================================
+   FORMS (shared)
+============================================================ */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.form-field{display:flex;flex-direction:column;gap:8px;}
+.form-field--full{grid-column:1/-1;}
+.form-field label{font-size:0.82rem;font-weight:600;color:var(--navy);}
+.form-field input,.form-field select,.form-field textarea{
+  border:1px solid var(--silver-strong);border-radius:var(--radius-sm);padding:13px 16px;
+  font-size:0.95rem;color:var(--ink);background:var(--white);transition:border-color .3s var(--ease),box-shadow .3s var(--ease);
+  width:100%;
+}
+.form-field textarea{resize:vertical;min-height:96px;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{
+  border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft);outline:none;
+}
+.form-field input::placeholder,.form-field textarea::placeholder{color:#9A9384;}
+
+.form-card{
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);
+  border:1px solid var(--silver);border-radius:var(--radius-lg);padding:clamp(28px,4vw,40px);box-shadow:var(--shadow-md);
+}
+.form-card--on-dark{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.14);}
+.form-card--on-dark .form-field label{color:var(--white);}
+.form-card--on-dark .form-field input,.form-card--on-dark .form-field select,.form-card--on-dark .form-field textarea{
+  background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.18);color:var(--white);
+}
+.form-card--on-dark .form-field input::placeholder,.form-card--on-dark .form-field textarea::placeholder{color:rgba(255,255,255,0.42);}
+.form-card--on-dark select option{color:#000;}
+
+@media (max-width:620px){.form-grid{grid-template-columns:1fr;}}
+
+/* ============================================================
+   APPOINTMENT
+============================================================ */
+.appointment__grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(40px,6vw,72px);align-items:start;}
+.steps{margin-top:32px;display:flex;flex-direction:column;gap:24px;}
+.step{display:flex;gap:18px;}
+.step__num{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--teal-dark);width:42px;height:42px;border-radius:50%;border:1.5px solid var(--teal-soft);background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step h4{font-size:1rem;color:var(--navy);margin-bottom:4px;}
+.step p{font-size:0.9rem;}
+
+@media (max-width:980px){.appointment__grid{grid-template-columns:1fr;}}
+
+/* ============================================================
+   CONSULTATION (dark contrast section)
+============================================================ */
+.section--dark h2,.section--dark h3,.section--dark h4{color:var(--white);}
+.section--dark .section-head p{color:rgba(255,255,255,0.7);}
+.consultation__grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:clamp(36px,6vw,64px);align-items:center;}
+.consultation__copy p{color:rgba(255,255,255,0.72);font-size:1.02rem;margin-bottom:16px;}
+.consultation__list{margin-top:24px;display:flex;flex-direction:column;gap:14px;}
+.consultation__list li{display:flex;gap:12px;align-items:flex-start;font-size:0.92rem;color:rgba(255,255,255,0.75);}
+.consultation__list svg{width:18px;height:18px;color:var(--teal);flex-shrink:0;margin-top:2px;}
+
+@media (max-width:980px){.consultation__grid{grid-template-columns:1fr;}}
+
+/* ============================================================
+   REVIEWS
+============================================================ */
+.reviews__wrap{max-width:640px;margin:0 auto;text-align:center;}
+.reviews__wrap .section-head{margin:0 auto 44px;}
+.star-rating{display:flex;justify-content:center;gap:8px;margin-bottom:6px;}
+.star-rating button{
+  background:none;border:none;padding:4px;line-height:0;
+}
+.star-rating svg{width:30px;height:30px;color:var(--silver-strong);transition:color .25s var(--ease),transform .25s var(--ease);}
+.star-rating button:hover svg,.star-rating button.is-hover svg{transform:scale(1.08);}
+.star-rating button.is-active svg,.star-rating button.is-hover svg{color:var(--teal);}
+.star-rating-hint{font-size:0.82rem;color:var(--ink-soft);margin-bottom:22px;}
+.reviews .form-card{text-align:left;}
+
+/* ============================================================
+   CONTACT
+============================================================ */
+.contact__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:56px;}
+.contact-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);border-radius:var(--radius-md);padding:22px;}
+.contact-card__icon{width:36px;height:36px;border-radius:10px;background:rgba(79,168,151,0.18);color:var(--teal);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.contact-card__icon svg{width:18px;height:18px;}
+.contact-card h4{font-size:0.92rem;color:var(--white);margin-bottom:6px;}
+.contact-card p{font-size:0.86rem;color:rgba(255,255,255,0.65);}
+.contact__form-wrap{max-width:760px;margin:0 auto;}
+
+@media (max-width:980px){.contact__grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.contact__grid{grid-template-columns:1fr;}}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer{background:var(--navy-deep);color:rgba(255,255,255,0.6);padding:56px 0 28px;}
+.footer__top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.footer__brand{max-width:300px;}
+.footer__logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.2rem;color:var(--white);margin-bottom:14px;}
+.footer__logo svg{width:26px;height:26px;}
+.footer__brand p{font-size:0.88rem;color:rgba(255,255,255,0.55);}
+.footer__cols{display:flex;gap:56px;flex-wrap:wrap;}
+.footer__col h5{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:16px;}
+.footer__col ul{display:flex;flex-direction:column;gap:10px;}
+.footer__col a{font-size:0.9rem;color:rgba(255,255,255,0.72);transition:color .25s var(--ease);}
+.footer__col a:hover{color:var(--teal);}
+.footer__bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:24px;font-size:0.8rem;}
+
+/* ============================================================
+   MODAL
+============================================================ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(8,24,33,0.55);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;padding:24px;z-index:1000;
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease);
+}
+.modal-overlay.is-open{opacity:1;visibility:visible;}
+.modal{
+  background:var(--white);border-radius:var(--radius-lg);max-width:440px;width:100%;
+  padding:36px 32px 32px;box-shadow:var(--shadow-lg);position:relative;text-align:center;
+  transform:translateY(16px) scale(0.97);transition:transform .4s var(--ease);
+}
+.modal-overlay.is-open .modal{transform:translateY(0) scale(1);}
+.modal__icon{width:54px;height:54px;border-radius:50%;background:var(--teal-soft);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.modal__icon svg{width:24px;height:24px;}
+.modal h3{font-size:1.2rem;margin-bottom:10px;}
+.modal p{font-size:0.94rem;}
+.modal__close{
+  position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;
+  background:var(--mist-100);border:none;display:flex;align-items:center;justify-content:center;transition:background .25s var(--ease);
+}
+.modal__close:hover{background:var(--silver);}
+.modal__close svg{width:15px;height:15px;color:var(--ink-soft);}
+.modal__action{margin-top:24px;}
+
+/* ============================================================
+   RESPONSIVE TYPE HELPERS
+============================================================ */
+@media (max-width:560px){
+  .section{padding:64px 0;}
+  .section-head{margin-bottom:32px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader" aria-hidden="true">
+  <div class="loader__mark">CLINIC</div>
+  <div class="loader__line"><span></span></div>
+</div>
+
+<div id="cursor-glow" aria-hidden="true"></div>
+
+<!-- NAVBAR -->
+<header class="nav" id="navbar">
+  <div class="nav__inner">
+    <a href="#home" class="nav__logo">
+      <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#6FA88F"/><path d="M5 17h5l2.3-6.4L16 23l2.3-8 1.3 2.4H27" stroke="#21403D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      CLINIC
+    </a>
+    <nav class="nav__links" id="navLinks">
+      <a href="#home" class="nav__link" data-link>Home</a>
+      <a href="#services" class="nav__link" data-link>Services</a>
+      <a href="#about" class="nav__link" data-link>About</a>
+      <a href="#team" class="nav__link" data-link>Medical Team</a>
+      <a href="#appointments" class="nav__link" data-link>Appointments</a>
+      <a href="#contact" class="nav__link" data-link>Contact</a>
+      <a href="#appointments" class="btn btn--primary nav__cta--mobile">Book Appointment</a>
+    </nav>
+    <div class="nav__right">
+      <a href="#appointments" class="btn btn--primary nav__cta">Book Appointment</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero__grid">
+      <div class="hero__content" data-reveal>
+        <span class="eyebrow eyebrow--on-dark">CLINIC  — General &amp; Family Medicine</span>
+        <h1 class="hero__title">Unhurried care.<br>Modern <em>medicine.</em></h1>
+        <p class="hero__sub">We pair attentive physicians with modern diagnostics, so every visit gets the time and attention it deserves — not the ten minutes a crowded schedule allows.</p>
+        <div class="hero__actions">
+          <a href="#appointments" class="btn btn--primary">Book Appointment</a>
+          <a href="#services" class="btn btn--on-dark">Explore Services</a>
+        </div>
+        <div class="hero__note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          Same-week appointments available for new patients
+        </div>
+      </div>
+
+      <div class="hero__visual" data-reveal>
+        <div class="hero__frame">
+          <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=900&q=80" alt="A physician at CLINIC \ speaking warmly with a patient" loading="eager">
+        </div>
+        <div class="status-card">
+          <div class="status-card__top">
+            <span class="status-card__label">Clinic Status</span>
+            <span class="status-card__badge" id="statusBadge">Checking…</span>
+          </div>
+          <div class="status-card__time" id="statusTime">--:--</div>
+          <div class="status-card__next" id="statusNext">Loading today's hours…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pulse" data-pulse aria-hidden="true">
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+      <path d="M0 30 H260 L290 8 L320 52 L350 30 H480 L505 14 L530 46 L555 30 H1200" stroke="#6FA88F"></path>
+    </svg>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about__grid">
+        <div class="about__visual" data-reveal>
+          <div class="about__img-main">
+            <img src="https://images.unsplash.com/photo-1666214280391-8ff5bd3c0bf0?auto=format&fit=crop&w=800&q=80" alt="Bright, modern interior of CLINIC" loading="lazy">
+          </div>
+          <div class="about__img-second">
+            <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=600&q=80" alt="Clean hallway inside the clinic" loading="lazy">
+          </div>
+        </div>
+
+        <div data-reveal>
+          <span class="eyebrow">About CLINIC</span>
+          <h2 style="font-size:clamp(1.9rem,3.4vw,2.6rem);margin-bottom:20px;">Healthcare built around your time, not our schedule.</h2>
+          <div class="about__copy">
+            <p>CLINIC started from a simple frustration: visits that feel rushed don't build trust, and care without trust doesn't hold up over time. So we built a clinic where physicians carry smaller patient loads, see the same people visit after visit, and have the time to actually listen.</p>
+            <p>That philosophy shapes everything here, from how appointments are scheduled to how results are explained. Modern medicine should feel personal, not transactional — and that's the standard we hold ourselves to every day.</p>
+          </div>
+
+          <div class="about__features">
+            <div class="feature-card">
+              <div class="feature-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V4"/><circle cx="18" cy="16" r="3"/><path d="M6 4v3"/></svg>
+              </div>
+              <h4>Expert Medical Care</h4>
+              <p>Experienced physicians across general and family medicine.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/><path d="M2 9h2M2 15h2M20 9h2M20 15h2M9 2v2M15 2v2M9 20v2M15 20v2"/></svg>
+              </div>
+              <h4>Modern Technology</h4>
+              <p>On-site diagnostics and digital records kept current and secure.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0 4-4.4 7-8.8 10.7C7.6 15.6 3.2 12.6 3.2 8.6a4.6 4.6 0 0 1 8.8-1.9 4.6 4.6 0 0 1 8.8 1.9z"/></svg>
+              </div>
+              <h4>Patient-Centered Approach</h4>
+              <p>Longer visits and care plans built around your life, not a checklist.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/></svg>
+              </div>
+              <h4>Trusted Professionals</h4>
+              <p>A consistent team that follows your care from visit to visit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section--alt" id="services">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">What We Treat</span>
+        <h2>Care for the everyday, and the unexpected.</h2>
+        <p>From a same-day cough to ongoing chronic care, our physicians cover the full range of general and family medicine.</p>
+      </div>
+
+      <div class="services__grid">
+        <article class="service-card" data-reveal>
+          <div class="service-card__media"><img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=700&q=80" alt="Stethoscope used during a general practice visit" loading="lazy"></div>
+          <div class="service-card__body">
+            <div class="service-card__line"></div>
+            <h3>General Practice</h3>
+            <p>Same-day visits for illness, injury, and everyday health concerns, with a physician who already knows your history.</p>
+          </div>
+        </article>
+
+        <article class="service-card" data-reveal>
+          <div class="service-card__media"><img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=700&q=80" alt="Physician reviewing preventive care results" loading="lazy"></div>
+          <div class="service-card__body">
+            <div class="service-card__line"></div>
+            <h3>Preventive Care</h3>
+            <p>Annual exams, vaccinations, and screenings designed to catch small issues before they become big ones.</p>
+          </div>
+        </article>
+
+        <article class="service-card" data-reveal>
+          <div class="service-card__media"><img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=700&q=80" alt="Health screening examination in progress" loading="lazy"></div>
+          <div class="service-card__body">
+            <div class="service-card__line"></div>
+            <h3>Health Screenings</h3>
+            <p>Blood work, vitals, and diagnostic panels reviewed and explained in plain language — never just a printout.</p>
+          </div>
+        </article>
+
+        <article class="service-card" data-reveal>
+          <div class="service-card__media"><img src="https://images.unsplash.com/photo-1576765608866-5b51046452be?auto=format&fit=crop&w=700&q=80" alt="Family medicine consultation room" loading="lazy"></div>
+          <div class="service-card__body">
+            <div class="service-card__line"></div>
+            <h3>Family Medicine</h3>
+            <p>Care for every stage of life, from pediatric checkups to care for aging parents, under one roof.</p>
+          </div>
+        </article>
+
+        <article class="service-card" data-reveal>
+          <div class="service-card__media"><img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=700&q=80" alt="Chronic care management check-in" loading="lazy"></div>
+          <div class="service-card__body">
+            <div class="service-card__line"></div>
+            <h3>Chronic Care Management</h3>
+            <p>Ongoing support for diabetes, hypertension, and other long-term conditions, with a plan that adjusts as you do.</p>
+          </div>
+        </article>
+
+        <article class="service-card" data-reveal>
+          <div class="service-card__media"><img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=700&q=80" alt="Care team coordinating a specialist referral" loading="lazy"></div>
+          <div class="service-card__body">
+            <div class="service-card__line"></div>
+            <h3>Specialist Referrals</h3>
+            <p>When you need a specialist, we coordinate the referral and follow up — so nothing falls through the cracks.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILITIES -->
+  <section class="section" id="facilities">
+    <div class="wrap">
+      <div class="facilities__head" data-reveal>
+        <div class="section-head" style="margin-bottom:0;">
+          <span class="eyebrow">Inside CLINIC</span>
+          <h2>A clinic designed to feel calmer than a clinic.</h2>
+        </div>
+        <div class="facilities__nav">
+          <button id="facPrev" aria-label="Scroll facilities left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button id="facNext" aria-label="Scroll facilities right">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="facilities__track" id="facTrack">
+        <article class="facility-card">
+          <div class="facility-card__media"><img src="https://images.unsplash.com/photo-1666214280391-8ff5bd3c0bf0?auto=format&fit=crop&w=720&q=80" alt="Reception and welcome lounge" loading="lazy"></div>
+          <div class="facility-card__body">
+            <span class="facility-card__index">01 / Reception</span>
+            <h3>Reception &amp; Welcome Lounge</h3>
+            <p>The first five minutes set the tone. Ours start with comfortable seating, daylight, and a team that knows your name.</p>
+          </div>
+        </article>
+
+        <article class="facility-card">
+          <div class="facility-card__media"><img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?auto=format&fit=crop&w=720&q=80" alt="Private consultation room" loading="lazy"></div>
+          <div class="facility-card__body">
+            <span class="facility-card__index">02 / Consultation</span>
+            <h3>Consultation Rooms</h3>
+            <p>Private rooms sized for conversation, not just examination.</p>
+          </div>
+        </article>
+
+        <article class="facility-card">
+          <div class="facility-card__media"><img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=720&q=80" alt="Treatment room corridor" loading="lazy"></div>
+          <div class="facility-card__body">
+            <span class="facility-card__index">03 / Treatment</span>
+            <h3>Treatment Rooms</h3>
+            <p>Fully equipped for same-visit procedures, so you're not sent elsewhere for routine care.</p>
+          </div>
+        </article>
+
+        <article class="facility-card">
+          <div class="facility-card__media"><img src="https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&w=720&q=80" alt="On-site diagnostic suite" loading="lazy"></div>
+          <div class="facility-card__body">
+            <span class="facility-card__index">04 / Diagnostics</span>
+            <h3>Diagnostic Suite</h3>
+            <p>On-site testing means most results come back the same day.</p>
+          </div>
+        </article>
+
+        <article class="facility-card">
+          <div class="facility-card__media"><img src="https://images.unsplash.com/photo-1576765608866-5b51046452be?auto=format&fit=crop&w=720&q=80" alt="Quiet waiting lounge" loading="lazy"></div>
+          <div class="facility-card__body">
+            <span class="facility-card__index">05 / Lounge</span>
+            <h3>Waiting Lounge</h3>
+            <p>A quiet space to sit, work, or simply breathe before your appointment.</p>
+          </div>
+        </article>
+
+        <article class="facility-card">
+          <div class="facility-card__media"><img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=720&q=80" alt="Modern clinic equipment" loading="lazy"></div>
+          <div class="facility-card__body">
+            <span class="facility-card__index">06 / Equipment</span>
+            <h3>Equipment &amp; Technology</h3>
+            <p>Modern diagnostic equipment, maintained and calibrated on a strict schedule.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="pulse pulse--quiet" data-pulse aria-hidden="true">
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+      <path d="M0 30 H400 L420 12 L445 48 L470 30 H1200" stroke="#21403D"></path>
+    </svg>
+  </div>
+
+  <!-- MEDICAL TEAM -->
+  <section class="section section--alt" id="team">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Meet the Team</span>
+        <h2>Physicians who stay for the follow-up.</h2>
+        <p>A small, consistent team so you see a familiar face at every visit — not whoever happens to be available.</p>
+      </div>
+
+      <div class="team__grid">
+        <article class="team-card" data-reveal>
+          <div class="team-card__media"><img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=500&h=500&q=80" alt="Portrait of Dr. Maya Whitfield" loading="lazy"></div>
+          <span class="team-card__specialty">General Practice</span>
+          <h3>Dr. Maya Whitfield</h3>
+          <p>Focuses on continuity of care, often seeing the same patients for years, with a particular interest in preventive health.</p>
+        </article>
+
+        <article class="team-card" data-reveal>
+          <div class="team-card__media"><img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=500&h=500&q=80" alt="Portrait of Dr. Daniel Osei" loading="lazy"></div>
+          <span class="team-card__specialty">Family Medicine</span>
+          <h3>Dr. Daniel Osei</h3>
+          <p>Sees patients of every age, from newborns to grandparents, and is known for explaining things clearly without rushing.</p>
+        </article>
+
+        <article class="team-card" data-reveal>
+          <div class="team-card__media"><img src="https://images.unsplash.com/photo-1612531386530-97286d97c2d2?auto=format&fit=crop&w=500&h=500&q=80" alt="Portrait of Dr. Priya Nandakumar" loading="lazy"></div>
+          <span class="team-card__specialty">Internal Medicine</span>
+          <h3>Dr. Priya Nandakumar</h3>
+          <p>Specializes in chronic condition management, working closely with patients to adjust care plans as their needs change.</p>
+        </article>
+
+        <article class="team-card" data-reveal>
+          <div class="team-card__media"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=500&h=500&q=80" alt="Portrait of Dr. Lucas Ferreira" loading="lazy"></div>
+          <span class="team-card__specialty">Diagnostics &amp; Referrals</span>
+          <h3>Dr. Lucas Ferreira</h3>
+          <p>Coordinates specialist referrals and diagnostic testing, making sure nothing gets lost between appointments.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPOINTMENTS -->
+  <section class="section" id="appointments">
+    <div class="wrap">
+      <div class="appointment__grid">
+        <div data-reveal>
+          <span class="eyebrow">Book a Visit</span>
+          <h2 style="font-size:clamp(1.9rem,3.4vw,2.6rem);">Tell us what you need. We'll handle the rest.</h2>
+          <p style="margin-top:16px;font-size:1.02rem;">Share a few details below and our front desk will confirm a time that works for you, usually within one business day.</p>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step__num">1</div>
+              <div><h4>Share your details</h4><p>Tell us who you are and what you need help with.</p></div>
+            </div>
+            <div class="step">
+              <div class="step__num">2</div>
+              <div><h4>We confirm a time</h4><p>Our team reaches out to lock in a date and time that fits your schedule.</p></div>
+            </div>
+            <div class="step">
+              <div class="step__num">3</div>
+              <div><h4>See you at the clinic</h4><p>Arrive a few minutes early, relax in the lounge, and we'll take it from there.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <form class="form-card" id="appointmentForm" novalidate>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="apptName">Full Name</label>
+                <input type="text" id="apptName" name="name" placeholder="Jordan Reyes" required>
+              </div>
+              <div class="form-field">
+                <label for="apptPhone">Phone Number</label>
+                <input type="tel" id="apptPhone" name="phone" placeholder="(555) 014-2390" required>
+              </div>
+              <div class="form-field">
+                <label for="apptEmail">Email</label>
+                <input type="email" id="apptEmail" name="email" placeholder="you@email.com" required>
+              </div>
+              <div class="form-field">
+                <label for="apptService">Service Required</label>
+                <select id="apptService" name="service" required>
+                  <option value="" disabled selected>Choose a service</option>
+                  <option>General Practice</option>
+                  <option>Preventive Care</option>
+                  <option>Health Screenings</option>
+                  <option>Family Medicine</option>
+                  <option>Chronic Care Management</option>
+                  <option>Specialist Referrals</option>
+                  <option>Something else</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="apptDate">Preferred Date</label>
+                <input type="date" id="apptDate" name="date" required>
+              </div>
+              <div class="form-field">
+                <label for="apptTime">Preferred Time</label>
+                <input type="time" id="apptTime" name="time" required>
+              </div>
+              <div class="form-field form-field--full">
+                <label for="apptMessage">Message</label>
+                <textarea id="apptMessage" name="message" placeholder="Anything we should know before your visit?"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn--primary btn--block" style="margin-top:22px;">Request Appointment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTATION -->
+  <section class="section section--dark" id="consultation">
+    <div class="wrap">
+      <div class="consultation__grid">
+        <div data-reveal>
+          <span class="eyebrow eyebrow--on-dark">Free Health Consultation</span>
+          <h2 style="font-size:clamp(1.9rem,3.4vw,2.6rem);">Not sure where to start? Ask us first.</h2>
+          <div class="consultation__copy">
+            <p>If you're not sure which service is right for you, send us a short description of what's going on. A member of our clinical team will review it and help point you in the right direction — no appointment required yet.</p>
+          </div>
+          <ul class="consultation__list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Reviewed by a real member of our clinical team</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> No obligation to book afterward</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Usually a response within one business day</li>
+          </ul>
+        </div>
+
+        <div data-reveal>
+          <form class="form-card form-card--on-dark" id="consultationForm" novalidate>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="consName">Name</label>
+                <input type="text" id="consName" name="name" placeholder="Your full name" required>
+              </div>
+              <div class="form-field">
+                <label for="consPhone">Phone</label>
+                <input type="tel" id="consPhone" name="phone" placeholder="(555) 014-2390" required>
+              </div>
+              <div class="form-field form-field--full">
+                <label for="consEmail">Email</label>
+                <input type="email" id="consEmail" name="email" placeholder="you@email.com" required>
+              </div>
+              <div class="form-field form-field--full">
+                <label for="consConcern">Health Concern</label>
+                <input type="text" id="consConcern" name="concern" placeholder="e.g. persistent headaches, fatigue">
+              </div>
+              <div class="form-field form-field--full">
+                <label for="consMessage">Message</label>
+                <textarea id="consMessage" name="message" placeholder="Tell us a bit more about what you're experiencing"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn--primary btn--block" style="margin-top:22px;">Send Consultation Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="section" id="reviews">
+    <div class="wrap">
+      <div class="reviews__wrap">
+        <div class="section-head" data-reveal>
+          <span class="eyebrow">Share Your Experience</span>
+          <h2>Tell other patients about your visit.</h2>
+          <p>This preview doesn't display reviews publicly yet — a connected backend is needed to store and show them. Your feedback still helps us improve.</p>
+        </div>
+
+        <form class="form-card" id="reviewForm" data-reveal novalidate>
+          <div class="form-field" style="margin-bottom:18px;">
+            <label for="reviewName">Name</label>
+            <input type="text" id="reviewName" name="name" placeholder="Your name" required>
+          </div>
+
+          <div class="form-field" style="margin-bottom:8px;">
+            <label>Rating</label>
+            <div class="star-rating" id="starRating" role="radiogroup" aria-label="Rating, 1 to 5 stars">
+              <button type="button" data-star="1" role="radio" aria-checked="false" aria-label="1 star"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.847L19.335 24 12 19.897 4.665 24 6 15.595 0 9.748l8.332-1.593z"/></svg></button>
+              <button type="button" data-star="2" role="radio" aria-checked="false" aria-label="2 stars"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.847L19.335 24 12 19.897 4.665 24 6 15.595 0 9.748l8.332-1.593z"/></svg></button>
+              <button type="button" data-star="3" role="radio" aria-checked="false" aria-label="3 stars"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.847L19.335 24 12 19.897 4.665 24 6 15.595 0 9.748l8.332-1.593z"/></svg></button>
+              <button type="button" data-star="4" role="radio" aria-checked="false" aria-label="4 stars"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.847L19.335 24 12 19.897 4.665 24 6 15.595 0 9.748l8.332-1.593z"/></svg></button>
+              <button type="button" data-star="5" role="radio" aria-checked="false" aria-label="5 stars"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.847L19.335 24 12 19.897 4.665 24 6 15.595 0 9.748l8.332-1.593z"/></svg></button>
+            </div>
+            <input type="hidden" id="ratingValue" name="rating" value="0">
+            <div class="star-rating-hint" id="ratingHint">Tap a star to rate</div>
+          </div>
+
+          <div class="form-field">
+            <label for="reviewText">Review</label>
+            <textarea id="reviewText" name="review" placeholder="How was your visit?" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--block" style="margin-top:22px;">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section section--dark" id="contact">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow eyebrow--on-dark">Get in Touch</span>
+        <h2>Visit, call, or write to us.</h2>
+        <p>Have a question before booking? Reach out and our front desk will get back to you.</p>
+      </div>
+
+      <div class="contact__grid">
+        <div class="contact-card" data-reveal>
+          <div class="contact-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.78.65 2.62a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.46-1.22a2 2 0 0 1 2.11-.45c.84.31 1.72.53 2.62.65A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h4>Phone</h4>
+          <p>(555) 014-2390</p>
+        </div>
+        <div class="contact-card" data-reveal>
+          <div class="contact-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></div>
+          <h4>Email</h4>
+          <p>hello@CLINICclinic.com</p>
+        </div>
+        <div class="contact-card" data-reveal>
+          <div class="contact-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h4>Address</h4>
+          <p>214 Harbor Lane, Suite 100</p>
+        </div>
+        <div class="contact-card" data-reveal>
+          <div class="contact-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <h4>Hours</h4>
+          <p>Mon–Fri 8–6 · Sat 9–2 · Sun Closed</p>
+        </div>
+      </div>
+
+      <p style="text-align:center;font-size:0.86rem;color:rgba(255,255,255,0.55);margin-bottom:48px;">For medical emergencies, call 911 or go to your nearest emergency room.</p>
+
+      <div class="contact__form-wrap" data-reveal>
+        <form class="form-card form-card--on-dark" id="contactForm" novalidate>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="contactName">Name</label>
+              <input type="text" id="contactName" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-field">
+              <label for="contactEmail">Email</label>
+              <input type="email" id="contactEmail" name="email" placeholder="you@email.com" required>
+            </div>
+            <div class="form-field form-field--full">
+              <label for="contactMessage">Message</label>
+              <textarea id="contactMessage" name="message" placeholder="How can we help?" required></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block" style="margin-top:22px;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="footer__logo">
+          <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#6FA88F"/><path d="M5 17h5l2.3-6.4L16 23l2.3-8 1.3 2.4H27" stroke="#21403D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          CLINIC
+        </div>
+        <p>A private general and family medicine clinic focused on unhurried, attentive care.</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <h5>Clinic</h5>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#team">Medical Team</a></li>
+            <li><a href="#facilities">Facilities</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h5>Patients</h5>
+          <ul>
+            <li><a href="#appointments">Appointments</a></li>
+            <li><a href="#consultation">Free Consultation</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 CLINIC. All rights reserved.</span>
+      <span>This is a demo website built for presentation purposes.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal__close" id="modalClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+    </div>
+    <h3 id="modalTitle">Demo Mode</h3>
+    <p id="modalMessage">This feature is disabled in this demo version.</p>
+    <div class="modal__action">
+      <button class="btn btn--primary" id="modalOk">Got it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* -------- LOADER -------- */
+  window.addEventListener('load', function(){
+    var loader = document.getElementById('loader');
+    setTimeout(function(){ loader.classList.add('is-hidden'); }, 500);
+  });
+
+  /* -------- NAVBAR -------- */
+  var navbar = document.getElementById('navbar');
+  var navLinks = document.getElementById('navLinks');
+  var navToggle = document.getElementById('navToggle');
+
+  function onScroll(){
+    if (window.scrollY > 40) navbar.classList.add('is-scrolled');
+    else navbar.classList.remove('is-scrolled');
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  navToggle.addEventListener('click', function(){
+    var open = navLinks.classList.toggle('is-open');
+    navToggle.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  document.querySelectorAll('[data-link]').forEach(function(link){
+    link.addEventListener('click', function(){
+      navLinks.classList.remove('is-open');
+      navToggle.classList.remove('is-open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* active link highlighting */
+  var sections = document.querySelectorAll('main section[id]');
+  var navItems = document.querySelectorAll('.nav__link');
+  var navObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        navItems.forEach(function(l){
+          l.classList.toggle('is-active', l.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(function(s){ navObserver.observe(s); });
+
+  /* -------- SCROLL REVEAL -------- */
+  var revealEls = document.querySelectorAll('[data-reveal]');
+  var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry, i){
+      if (entry.isIntersecting){
+        entry.target.style.transitionDelay = (i % 4) * 70 + 'ms';
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(function(el){ revealObserver.observe(el); });
+
+  /* pulse dividers */
+  var pulses = document.querySelectorAll('[data-pulse]');
+  var pulseObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        pulseObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  pulses.forEach(function(el){ pulseObserver.observe(el); });
+
+  /* -------- CURSOR GLOW -------- */
+  if (!reduceMotion && window.matchMedia('(pointer:fine)').matches){
+    var glow = document.getElementById('cursor-glow');
+    var raf = null, mx = 0, my = 0;
+    document.addEventListener('mousemove', function(e){
+      mx = e.clientX; my = e.clientY;
+      glow.classList.add('is-active');
+      if (!raf){
+        raf = requestAnimationFrame(function(){
+          glow.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
+          raf = null;
+        });
+      }
+    });
+    document.addEventListener('mouseleave', function(){ glow.classList.remove('is-active'); });
+  }
+
+  /* -------- HERO LIVE STATUS -------- */
+  var statusBadge = document.getElementById('statusBadge');
+  var statusTime = document.getElementById('statusTime');
+  var statusNext = document.getElementById('statusNext');
+  var hours = { 0:null, 1:[8,18], 2:[8,18], 3:[8,18], 4:[8,18], 5:[8,18], 6:[9,14] };
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  function pad(n){ return n < 10 ? '0' + n : n; }
+
+  function formatHour(h){
+    var period = h >= 12 ? 'PM' : 'AM';
+    var hour12 = h % 12 === 0 ? 12 : h % 12;
+    return hour12 + ':00 ' + period;
+  }
+
+  function updateStatus(){
+    var now = new Date();
+    var day = now.getDay();
+    var hr = now.getHours();
+    var min = now.getMinutes();
+    var todays = hours[day];
+    var isOpen = todays && hr >= todays[0] && hr < todays[1];
+
+    statusTime.textContent = pad(hr % 12 === 0 ? 12 : hr % 12) + ':' + pad(min) + ' ' + (hr >= 12 ? 'PM' : 'AM');
+
+    if (isOpen){
+      statusBadge.textContent = 'Open Now';
+      statusBadge.classList.remove('is-closed');
+      var nextSlotHour = min < 30 ? hr : hr + 1;
+      var nextSlotMin = min < 30 ? 30 : 0;
+      if (nextSlotHour >= todays[1]){
+        statusNext.innerHTML = 'Next available: <b>Tomorrow morning</b>';
+      } else {
+        statusNext.innerHTML = 'Next available: <b>Today, ' + formatHour(nextSlotHour).replace(':00', nextSlotMin === 30 ? ':30' : ':00') + '</b>';
+      }
+    } else {
+      statusBadge.textContent = 'Closed';
+      statusBadge.classList.add('is-closed');
+      var nd = day, tries = 0;
+      do { nd = (nd + 1) % 7; tries++; } while (!hours[nd] && tries < 8);
+      statusNext.innerHTML = 'Opens ' + (tries === 1 ? '' : 'next ') + dayNames[nd] + ' at <b>' + formatHour(hours[nd][0]) + '</b>';
+    }
+  }
+  updateStatus();
+  setInterval(updateStatus, 30000);
+
+  /* -------- FACILITIES SCROLLER -------- */
+  var track = document.getElementById('facTrack');
+  document.getElementById('facPrev').addEventListener('click', function(){
+    track.scrollBy({ left: -380, behavior: 'smooth' });
+  });
+  document.getElementById('facNext').addEventListener('click', function(){
+    track.scrollBy({ left: 380, behavior: 'smooth' });
+  });
+
+  /* -------- STAR RATING -------- */
+  var starButtons = document.querySelectorAll('#starRating button');
+  var ratingValue = document.getElementById('ratingValue');
+  var ratingHint = document.getElementById('ratingHint');
+  var hintText = ['Tap a star to rate','Poor','Fair','Good','Very good','Excellent'];
+
+  function paintStars(value, hover){
+    starButtons.forEach(function(btn){
+      var v = parseInt(btn.getAttribute('data-star'), 10);
+      btn.classList.toggle(hover ? 'is-hover' : 'is-active', v <= value);
+      if (!hover) btn.classList.toggle('is-active', v <= value);
+      btn.setAttribute('aria-checked', v === value ? 'true' : 'false');
+    });
+  }
+  starButtons.forEach(function(btn){
+    var v = parseInt(btn.getAttribute('data-star'), 10);
+    btn.addEventListener('mouseenter', function(){ paintStars(v, true); });
+    btn.addEventListener('mouseleave', function(){ paintStars(parseInt(ratingValue.value,10), false); starButtons.forEach(function(b){b.classList.remove('is-hover');}); });
+    btn.addEventListener('click', function(){
+      ratingValue.value = v;
+      ratingHint.textContent = hintText[v];
+      paintStars(v, false);
+    });
+  });
+
+  /* -------- MODAL -------- */
+  var overlay = document.getElementById('modalOverlay');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalMessage = document.getElementById('modalMessage');
+
+  function openModal(title, message){
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOk').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeModal(); });
+
+  /* -------- FORM HANDLERS -------- */
+  function handleDemoForm(formId, title, message, resetExtra){
+    var form = document.getElementById(formId);
+    if (!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      openModal(title, message);
+      form.reset();
+      if (resetExtra) resetExtra();
+    });
+  }
+
+  handleDemoForm('appointmentForm', 'Appointment Request', 'Appointment booking functionality is disabled in this demo version. A live booking system can be connected using a backend service.');
+  handleDemoForm('consultationForm', 'Consultation Request', 'Consultation request functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.');
+  handleDemoForm('contactForm', 'Message Sent', 'Contact functionality is disabled in this demo version. A backend service is required to receive messages.');
+  handleDemoForm('reviewForm', 'Review Submitted', 'Review functionality is disabled in this demo version. A backend database is required to store patient reviews.', function(){
+    document.getElementById('ratingValue').value = 0;
+    document.getElementById('ratingHint').textContent = 'Tap a star to rate';
+    starButtons.forEach(function(b){ b.classList.remove('is-active','is-hover'); });
+  });
+
+})();
+</script>
+</body>
+</html>
