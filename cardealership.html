@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAR DEALER — Premium Automotive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --black: #0a0a0a;
+    --graphite: #111213;
+    --charcoal: #1c1e21;
+    --gunmetal: #2c2f33;
+    --silver: #9ca3af;
+    --mist: #d1d5db;
+    --white: #f8f9fa;
+    --blue: #3b82f6;
+    --blue-dim: rgba(59,130,246,0.12);
+    --blue-glow: rgba(59,130,246,0.25);
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --shadow-xl: 0 32px 80px rgba(0,0,0,0.7);
+    --shadow-card: 0 8px 32px rgba(0,0,0,0.5);
+    --radius: 6px;
+    --radius-lg: 12px;
+    --transition: 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-serif: 'DM Serif Display', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; background: none; font-family: inherit; }
+  ul { list-style: none; }
+  input, select, textarea {
+    font-family: var(--font-body);
+    color: var(--white);
+    background: transparent;
+  }
+
+  /* ============ LOADER ============ */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: 0.18em;
+    color: var(--white);
+  }
+  .loader-logo span { color: var(--blue); }
+  .loader-bar {
+    width: 160px; height: 2px;
+    background: var(--gunmetal);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    display: block; height: 100%;
+    background: var(--blue);
+    animation: loadBar 1.4s ease forwards;
+  }
+  @keyframes loadBar {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  /* ============ MOUSE GLOW ============ */
+  #glow {
+    pointer-events: none;
+    position: fixed; z-index: 1;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+    transform: translate(-50%,-50%);
+    transition: opacity 0.3s ease;
+  }
+
+  /* ============ NAVBAR ============ */
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 76px;
+    transition: background var(--transition), backdrop-filter var(--transition), box-shadow var(--transition);
+  }
+  #navbar.scrolled {
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 1px 0 var(--glass-border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-links {
+    display: flex; align-items: center; gap: 36px;
+  }
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--silver);
+    transition: color var(--transition);
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--blue);
+    transform: scaleX(0);
+    transition: transform var(--transition);
+    transform-origin: left;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+  .nav-cta {
+    padding: 10px 24px;
+    background: var(--blue);
+    color: var(--white) !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.12em;
+    border-radius: var(--radius);
+    transition: background var(--transition), transform var(--transition) !important;
+  }
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { background: #2563eb; transform: translateY(-1px); }
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    width: 28px; cursor: pointer; padding: 4px 0;
+  }
+  .hamburger span {
+    display: block; height: 2px; background: var(--white);
+    border-radius: 2px;
+    transition: transform var(--transition), opacity var(--transition);
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu {
+    display: none;
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(24px);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 32px;
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--transition);
+  }
+  .mobile-menu.open { opacity: 1; pointer-events: all; }
+  .mobile-menu a {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.12em;
+    color: var(--silver);
+    transition: color var(--transition);
+  }
+  .mobile-menu a:hover { color: var(--white); }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .mobile-menu { display: flex; }
+  }
+
+  /* ============ HERO ============ */
+  #hero {
+    position: relative; height: 100vh; min-height: 680px;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+  }
+  .hero-bg img {
+    object-position: center 60%;
+    transform: scale(1.04);
+    animation: heroZoom 12s ease forwards;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.04); }
+    to { transform: scale(1); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(10,10,10,0.82) 0%,
+      rgba(10,10,10,0.45) 50%,
+      rgba(10,10,10,0.2) 100%
+    );
+  }
+  .hero-overlay-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(to top, var(--black), transparent);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5vw 80px;
+    max-width: 900px;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 500;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.6s forwards;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 12rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.8s forwards;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.35);
+  }
+  .hero-sub {
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    color: var(--silver);
+    max-width: 460px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 44px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2s forwards;
+  }
+  .hero-actions {
+    display: flex; flex-wrap: wrap; gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2.2s forwards;
+  }
+  .btn-primary {
+    padding: 15px 36px;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: var(--radius);
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  }
+  .btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(59,130,246,0.4);
+  }
+  .btn-ghost {
+    padding: 15px 36px;
+    border: 1px solid var(--glass-border);
+    color: var(--white);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: var(--radius);
+    background: var(--glass);
+    backdrop-filter: blur(8px);
+    transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-2px);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 40px; right: 5vw; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2.6s forwards;
+  }
+  .hero-scroll span {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--silver);
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ SECTION UTILITIES ============ */
+  section { position: relative; }
+  .section-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 6rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--white);
+  }
+  .section-lead {
+    font-size: 1rem;
+    color: var(--silver);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ============ MARQUEE TICKER ============ */
+  .ticker-wrap {
+    background: var(--blue);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: inline-flex; gap: 0;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-track:hover { animation-play-state: paused; }
+  .ticker-item {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    color: var(--white);
+    padding: 0 48px;
+    display: inline-flex; align-items: center; gap: 48px;
+  }
+  .ticker-item::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ============ ABOUT ============ */
+  #about {
+    padding: 120px 5vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-visual {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4/5;
+  }
+  .about-visual img { border-radius: var(--radius-lg); }
+  .about-badge {
+    position: absolute;
+    bottom: 28px; left: 28px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 18px 24px;
+  }
+  .about-badge-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 6px;
+  }
+  .about-badge-value {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+  .about-badge-value span { color: var(--blue); }
+ 
+  .about-copy .section-title { margin-bottom: 24px; }
+  .about-copy .section-lead { margin-bottom: 40px; }
+  .about-pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .pillar-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .pillar-card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.14);
+  }
+  .pillar-icon {
+    width: 32px; height: 32px; margin-bottom: 12px;
+  }
+  .pillar-icon svg { width: 100%; height: 100%; }
+  .pillar-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .pillar-desc {
+    font-size: 0.77rem;
+    color: var(--silver);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 860px) {
+    #about { grid-template-columns: 1fr; gap: 48px; }
+    .about-visual { aspect-ratio: 16/9; }
+  }
+
+  /* ============ FEATURED VEHICLES ============ */
+  #featured {
+    padding: 120px 5vw;
+    background: var(--graphite);
+  }
+  .featured-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+  }
+  .featured-header .section-title { max-width: 480px; }
+  .view-all-link {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+    border-bottom: 1px solid var(--blue);
+    padding-bottom: 2px;
+    transition: opacity var(--transition);
+    white-space: nowrap;
+  }
+  .view-all-link:hover { opacity: 0.75; }
+  .vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .vehicle-card {
+    background: var(--charcoal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    cursor: pointer;
+  }
+  .vehicle-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-card);
+    border-color: rgba(255,255,255,0.14);
+  }
+  .vehicle-card:hover .vc-img img {
+    transform: scale(1.06);
+  }
+  .vc-img {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .vc-img img { transition: transform 0.6s ease; }
+  .vc-badge {
+    position: absolute; top: 14px; left: 14px;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+  .vc-body { padding: 22px; }
+  .vc-make {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .vc-model {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .vc-year { font-size: 0.8rem; color: var(--silver); margin-bottom: 16px; }
+  .vc-specs {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 18px;
+  }
+  .vc-spec {
+    font-size: 0.7rem;
+    background: var(--gunmetal);
+    color: var(--mist);
+    padding: 5px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .vc-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 16px;
+  }
+  .vc-price {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .vc-cta {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    border: 1px solid var(--blue-glow);
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    transition: background var(--transition), color var(--transition);
+  }
+  .vc-cta:hover {
+    background: var(--blue);
+    color: var(--white);
+  }
+
+  @media (max-width: 1100px) {
+    .vehicles-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .vehicles-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ============ CATEGORIES ============ */
+  #categories {
+    padding: 120px 5vw;
+  }
+  .categories-header { text-align: center; margin-bottom: 64px; }
+  .categories-header .section-title { margin-bottom: 12px; }
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+  .cat-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition);
+  }
+  .cat-card:hover { transform: scale(1.01); }
+  .cat-card:hover .cat-img img { transform: scale(1.08); }
+  .cat-card--wide { grid-column: span 2; }
+  .cat-img {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }
+  .cat-card--wide .cat-img { aspect-ratio: 21/9; }
+  .cat-img img { transition: transform 0.6s ease; }
+  .cat-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 55%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 24px;
+  }
+  .cat-label {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .cat-count {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--silver);
+  }
+
+  @media (max-width: 860px) {
+    .categories-grid { grid-template-columns: 1fr 1fr; }
+    .cat-card--wide { grid-column: span 2; }
+  }
+  @media (max-width: 540px) {
+    .categories-grid { grid-template-columns: 1fr; }
+    .cat-card--wide { grid-column: span 1; }
+  }
+
+  /* ============ GALLERY ============ */
+  #gallery {
+    padding: 120px 5vw;
+    background: var(--graphite);
+  }
+  .gallery-header { margin-bottom: 56px; }
+  .gallery-masonry {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+  .gal-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .gal-item:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-card);
+    z-index: 2;
+    position: relative;
+  }
+  .gal-item:hover img { filter: brightness(1.1); }
+  .gal-item img { transition: filter 0.4s ease; }
+  .gal-item--tall { grid-row: span 2; }
+  .gal-item--wide { grid-column: span 2; }
+  .gal-item .gal-img { width: 100%; height: 100%; }
+  .gal-item--tall .gal-img { aspect-ratio: auto; height: 100%; min-height: 320px; }
+  .gal-item:not(.gal-item--tall) .gal-img { aspect-ratio: 4/3; }
+  .gal-item--wide:not(.gal-item--tall) .gal-img { aspect-ratio: 16/9; }
+
+  @media (max-width: 900px) {
+    .gallery-masonry { grid-template-columns: repeat(2,1fr); }
+    .gal-item--tall { grid-row: span 1; }
+    .gal-item--wide { grid-column: span 2; }
+  }
+  @media (max-width: 540px) {
+    .gallery-masonry { grid-template-columns: 1fr; }
+    .gal-item--wide { grid-column: span 1; }
+  }
+
+  /* ============ FINANCING ============ */
+  #financing {
+    padding: 120px 5vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .financing-copy .section-title { margin-bottom: 20px; }
+  .financing-copy .section-lead { margin-bottom: 36px; }
+  .fin-features { display: flex; flex-direction: column; gap: 18px; }
+  .fin-feature {
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .fin-feature-icon {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    background: var(--blue-dim);
+    border: 1px solid var(--blue-glow);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fin-feature-icon svg { width: 18px; height: 18px; stroke: var(--blue); fill: none; }
+  .fin-feature-text h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .fin-feature-text p { font-size: 0.8rem; color: var(--silver); }
+  .form-card {
+    background: var(--charcoal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+  }
+  .form-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 28px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--gunmetal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--white);
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--silver); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-dim);
+  }
+  .form-group select option { background: var(--charcoal); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: var(--radius);
+    margin-top: 8px;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  }
+  .form-submit:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(59,130,246,0.35);
+  }
+
+  @media (max-width: 860px) {
+    #financing { grid-template-columns: 1fr; gap: 56px; }
+  }
+
+  /* ============ INQUIRY ============ */
+  #inquiry {
+    padding: 120px 5vw;
+    background: var(--graphite);
+  }
+  .inquiry-inner {
+    max-width: 640px; margin: 0 auto; text-align: center;
+  }
+  .inquiry-inner .section-title { margin-bottom: 16px; }
+  .inquiry-inner .section-lead { margin-bottom: 44px; }
+  .inquiry-form { text-align: left; }
+  .inquiry-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--charcoal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--white);
+    outline: none;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .inquiry-form textarea::placeholder { color: var(--silver); }
+  .inquiry-form textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-dim);
+  }
+  .inquiry-form .form-group input,
+  .inquiry-form .form-group select {
+    background: var(--charcoal);
+  }
+
+  /* ============ REVIEWS ============ */
+  #reviews {
+    padding: 120px 5vw;
+  }
+  .reviews-inner { max-width: 640px; margin: 0 auto; text-align: center; }
+  .reviews-inner .section-title { margin-bottom: 16px; }
+  .reviews-inner .section-lead { margin-bottom: 12px; }
+  .review-note {
+    font-size: 0.78rem;
+    color: var(--gunmetal);
+    color: #555;
+    margin-bottom: 44px;
+    font-style: italic;
+  }
+  .star-select {
+    display: flex; justify-content: center; gap: 8px; margin-bottom: 20px;
+  }
+  .star-btn {
+    font-size: 1.6rem;
+    color: var(--gunmetal);
+    transition: color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+  }
+  .star-btn.active { color: #f59e0b; }
+  .star-btn:hover { transform: scale(1.2); }
+
+  /* ============ CONTACT ============ */
+  #contact {
+    padding: 120px 5vw;
+    background: var(--graphite);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .contact-copy .section-title { margin-bottom: 20px; }
+  .contact-copy .section-lead { margin-bottom: 40px; }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-item { display: flex; align-items: flex-start; gap: 16px; }
+  .contact-item-icon {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    background: var(--blue-dim);
+    border: 1px solid var(--blue-glow);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contact-item-icon svg { width: 20px; height: 20px; stroke: var(--blue); fill: none; }
+  .contact-item-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 4px;
+  }
+  .contact-item-value { font-size: 0.9rem; color: var(--white); font-weight: 500; }
+  
+
+  @media (max-width: 860px) {
+    #contact { grid-template-columns: 1fr; gap: 56px; }
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 64px 5vw 40px;
+    border-top: 1px solid var(--glass-border);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 56px;
+  }
+  .footer-brand .nav-logo { font-size: 2rem; margin-bottom: 16px; display: block; }
+  .footer-brand p { font-size: 0.82rem; color: var(--silver); line-height: 1.7; max-width: 280px; }
+  .footer-col h4 {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--silver);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+  .footer-col ul li a {
+    font-size: 0.84rem;
+    color: rgba(156,163,175,0.75);
+    transition: color var(--transition);
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+    padding-top: 32px;
+    border-top: 1px solid var(--glass-border);
+  }
+  .footer-copy { font-size: 0.75rem; color: var(--silver); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.75rem; color: var(--silver); transition: color var(--transition); }
+  .footer-legal a:hover { color: var(--white); }
+
+  @media (max-width: 900px) {
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: span 2; }
+  }
+  @media (max-width: 540px) {
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-brand { grid-column: span 1; }
+  }
+
+  /* ============ MODAL ============ */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 9998;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-box {
+    background: var(--charcoal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    max-width: 480px; width: 100%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .modal-overlay.open .modal-box { transform: scale(1); }
+  .modal-icon {
+    width: 56px; height: 56px;
+    background: var(--blue-dim);
+    border: 1px solid var(--blue-glow);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .modal-icon svg { width: 24px; height: 24px; stroke: var(--blue); fill: none; }
+  .modal-box h3 {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+  .modal-box p { font-size: 0.88rem; color: var(--silver); line-height: 1.7; margin-bottom: 32px; }
+  .modal-close {
+    padding: 12px 32px;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: var(--radius);
+    transition: background var(--transition);
+  }
+  .modal-close:hover { background: #2563eb; }
+
+  /* ============ SCROLLBAR ============ */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gunmetal); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--silver); }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">APEX <span>MOTORS</span></div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- MOUSE GLOW -->
+<div id="glow"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+    </div>
+    <h3 id="modal-title">Demo Mode</h3>
+    <p id="modal-msg">This functionality is disabled in the demo version.</p>
+    <button class="modal-close" onclick="closeModal()">Understood</button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">APEX <span>MOTORS</span></a>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#featured">Inventory</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#categories">Featured</a></li>
+    <li><a href="#financing">Financing</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero" onclick="toggleMenu()">Home</a>
+  <a href="#featured" onclick="toggleMenu()">Inventory</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#categories" onclick="toggleMenu()">Featured</a>
+  <a href="#financing" onclick="toggleMenu()">Financing</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1920&q=85&auto=format&fit=crop" alt="Luxury sports car hero" loading="eager">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-bottom"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Premium Automotive — Est. 2009</p>
+    <h1 class="hero-title">Drive<br><em>Excellence.</em></h1>
+    <p class="hero-sub">Handpicked luxury and performance vehicles, rigorously inspected and presented with the standard they deserve.</p>
+    <div class="hero-actions">
+      <a href="#featured" class="btn-primary">Browse Inventory</a>
+      <a href="#inquiry" class="btn-ghost">Schedule Inquiry</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">Luxury Sedans</span>
+    <span class="ticker-item">Performance Sports Cars</span>
+    <span class="ticker-item">Premium SUVs</span>
+    <span class="ticker-item">Electric Vehicles</span>
+    <span class="ticker-item">Certified Pre-Owned</span>
+    <span class="ticker-item">Flexible Financing</span>
+    <span class="ticker-item">White-Glove Service</span>
+    <span class="ticker-item">Luxury Sedans</span>
+    <span class="ticker-item">Performance Sports Cars</span>
+    <span class="ticker-item">Premium SUVs</span>
+    <span class="ticker-item">Electric Vehicles</span>
+    <span class="ticker-item">Certified Pre-Owned</span>
+    <span class="ticker-item">Flexible Financing</span>
+    <span class="ticker-item">White-Glove Service</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=900&q=80&auto=format&fit=crop" alt="Premium vehicle in showroom" loading="lazy">
+    <div class="about-badge">
+      <div class="about-badge-label">Years of Excellence</div>
+      <div class="about-badge-value">15<span>+</span></div>
+    </div>
+  </div>
+  <div class="about-copy">
+    <p class="section-eyebrow reveal">Our Story</p>
+    <h2 class="section-title reveal reveal-delay-1">More Than<br>A Dealership.</h2>
+    <p class="section-lead reveal reveal-delay-2">
+      CAR DEALER was founded on a singular belief: that acquiring a vehicle should feel as refined as the car itself. We partner with owners and collectors across the region to offer a handpicked selection of luxury, performance, and prestige vehicles — each one meeting our rigorous quality standards before it reaches our floor.
+    </p>
+    <div class="about-pillars reveal reveal-delay-3">
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
+          </svg>
+        </div>
+        <div class="pillar-name">Premium Selection</div>
+        <div class="pillar-desc">Every vehicle is handpicked from verified sources and pre-qualified for quality.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"/>
+          </svg>
+        </div>
+        <div class="pillar-name">Client-First Service</div>
+        <div class="pillar-desc">Our consultants guide you without pressure, at your pace and on your terms.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/>
+          </svg>
+        </div>
+        <div class="pillar-name">Full Inspection</div>
+        <div class="pillar-desc">Multi-point mechanical and cosmetic inspection on every vehicle before sale.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+          </svg>
+        </div>
+        <div class="pillar-name">Modern Experience</div>
+        <div class="pillar-desc">From first browse to final handover, every step is designed around your comfort.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED VEHICLES -->
+<section id="featured">
+  <div class="featured-header">
+    <div>
+      <p class="section-eyebrow reveal">Current Inventory</p>
+      <h2 class="section-title reveal reveal-delay-1">Featured<br>Vehicles.</h2>
+    </div>
+    <a href="#inquiry" class="view-all-link reveal reveal-delay-2">Request Full Inventory</a>
+  </div>
+  <div class="vehicles-grid">
+
+    <div class="vehicle-card reveal">
+      <div class="vc-img">
+        <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80&auto=format&fit=crop" alt="Porsche 911 GT3" loading="lazy">
+        <div class="vc-badge">Featured</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">Porsche</div>
+        <div class="vc-model">911 GT3</div>
+        <div class="vc-year">2023</div>
+        <div class="vc-specs">
+          <span class="vc-spec">4,200 mi</span>
+          <span class="vc-spec">7-Speed PDK</span>
+          <span class="vc-spec">Petrol</span>
+          <span class="vc-spec">510 hp</span>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-price">$229,900</div>
+          <button class="vc-cta" onclick="openModal('Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vehicle-card reveal reveal-delay-1">
+      <div class="vc-img">
+        <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80&auto=format&fit=crop" alt="BMW M5 Competition" loading="lazy">
+        <div class="vc-badge">New Arrival</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">BMW</div>
+        <div class="vc-model">M5 Competition</div>
+        <div class="vc-year">2024</div>
+        <div class="vc-specs">
+          <span class="vc-spec">1,800 mi</span>
+          <span class="vc-spec">8-Speed Auto</span>
+          <span class="vc-spec">Petrol</span>
+          <span class="vc-spec">617 hp</span>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-price">$148,500</div>
+          <button class="vc-cta" onclick="openModal('Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vehicle-card reveal reveal-delay-2">
+      <div class="vc-img">
+        <img src="https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80&auto=format&fit=crop" alt="Mercedes AMG GT" loading="lazy">
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">Mercedes-Benz</div>
+        <div class="vc-model">AMG GT 63 S</div>
+        <div class="vc-year">2023</div>
+        <div class="vc-specs">
+          <span class="vc-spec">6,400 mi</span>
+          <span class="vc-spec">9-Speed MCT</span>
+          <span class="vc-spec">Petrol</span>
+          <span class="vc-spec">630 hp</span>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-price">$187,200</div>
+          <button class="vc-cta" onclick="openModal('Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vehicle-card reveal">
+      <div class="vc-img">
+        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80&auto=format&fit=crop" alt="Audi RS7 Sportback" loading="lazy">
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">Audi</div>
+        <div class="vc-model">RS7 Sportback</div>
+        <div class="vc-year">2024</div>
+        <div class="vc-specs">
+          <span class="vc-spec">3,100 mi</span>
+          <span class="vc-spec">8-Speed Tiptronic</span>
+          <span class="vc-spec">Petrol</span>
+          <span class="vc-spec">591 hp</span>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-price">$134,800</div>
+          <button class="vc-cta" onclick="openModal('Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vehicle-card reveal reveal-delay-1">
+      <div class="vc-img">
+        <img src="https://images.unsplash.com/photo-1561015534-ece74d523fea?w=800&q=80&auto=format&fit=crop" alt="Tesla Model S Plaid" loading="lazy">
+        <div class="vc-badge">Electric</div>
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">Tesla</div>
+        <div class="vc-model">Model S Plaid</div>
+        <div class="vc-year">2023</div>
+        <div class="vc-specs">
+          <span class="vc-spec">9,200 mi</span>
+          <span class="vc-spec">Single-Speed</span>
+          <span class="vc-spec">Electric</span>
+          <span class="vc-spec">1,020 hp</span>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-price">$112,400</div>
+          <button class="vc-cta" onclick="openModal('Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vehicle-card reveal reveal-delay-2">
+      <div class="vc-img">
+        <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80&auto=format&fit=crop" alt="Range Rover Sport" loading="lazy">
+      </div>
+      <div class="vc-body">
+        <div class="vc-make">Land Rover</div>
+        <div class="vc-model">Range Rover Sport SVR</div>
+        <div class="vc-year">2023</div>
+        <div class="vc-specs">
+          <span class="vc-spec">12,000 mi</span>
+          <span class="vc-spec">8-Speed Auto</span>
+          <span class="vc-spec">Petrol</span>
+          <span class="vc-spec">575 hp</span>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-price">$98,600</div>
+          <button class="vc-cta" onclick="openModal('Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">Inquire Now</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="categories-header">
+    <p class="section-eyebrow reveal">Browse By Type</p>
+    <h2 class="section-title reveal reveal-delay-1">Explore Our<br>Collection.</h2>
+  </div>
+  <div class="categories-grid">
+
+    <div class="cat-card cat-card--wide reveal">
+      <div class="cat-img">
+        <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=1200&q=80&auto=format&fit=crop" alt="Sports Cars" loading="lazy">
+      </div>
+      <div class="cat-overlay">
+        <div class="cat-label">Sports Cars</div>
+        <div class="cat-count">Performance &amp; Exotics</div>
+      </div>
+    </div>
+
+    <div class="cat-card reveal reveal-delay-1">
+      <div class="cat-img">
+        <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&q=80&auto=format&fit=crop" alt="Luxury Sedans" loading="lazy">
+      </div>
+      <div class="cat-overlay">
+        <div class="cat-label">Luxury Sedans</div>
+        <div class="cat-count">Executive &amp; Prestige</div>
+      </div>
+    </div>
+
+    <div class="cat-card reveal reveal-delay-1">
+      <div class="cat-img">
+        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop" alt="Premium SUVs" loading="lazy">
+      </div>
+      <div class="cat-overlay">
+        <div class="cat-label">Premium SUVs</div>
+        <div class="cat-count">Capability &amp; Comfort</div>
+      </div>
+    </div>
+
+    <div class="cat-card reveal reveal-delay-2">
+      <div class="cat-img">
+        <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80&auto=format&fit=crop" alt="Electric Vehicles" loading="lazy">
+      </div>
+      <div class="cat-overlay">
+        <div class="cat-label">Electric Vehicles</div>
+        <div class="cat-count">Zero-Emission Performance</div>
+      </div>
+    </div>
+
+    <div class="cat-card cat-card--wide reveal reveal-delay-2">
+      <div class="cat-img">
+        <img src="https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?w=1200&q=80&auto=format&fit=crop" alt="Family Vehicles" loading="lazy">
+      </div>
+      <div class="cat-overlay">
+        <div class="cat-label">Family &amp; Touring</div>
+        <div class="cat-count">Space, Safety &amp; Style</div>
+      </div>
+    </div>
+
+    <div class="cat-card reveal reveal-delay-3">
+      <div class="cat-img">
+        <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&q=80&auto=format&fit=crop" alt="Performance Cars" loading="lazy">
+      </div>
+      <div class="cat-overlay">
+        <div class="cat-label">Performance Cars</div>
+        <div class="cat-count">Track-Focused Machines</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header">
+    <p class="section-eyebrow reveal">Visual Showcase</p>
+    <h2 class="section-title reveal reveal-delay-1">The Apex<br>Experience.</h2>
+  </div>
+  <div class="gallery-masonry">
+
+    <div class="gal-item gal-item--tall reveal">
+      <div class="gal-img">
+        <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600&q=80&auto=format&fit=crop" alt="Luxury car exterior" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gal-item reveal reveal-delay-1">
+      <div class="gal-img" style="aspect-ratio:4/3">
+        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&q=80&auto=format&fit=crop" alt="Sports car interior" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gal-item reveal reveal-delay-2">
+      <div class="gal-img" style="aspect-ratio:4/3">
+        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=80&auto=format&fit=crop" alt="Classic sports car" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gal-item gal-item--tall reveal reveal-delay-1">
+      <div class="gal-img">
+        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&q=80&auto=format&fit=crop" alt="Premium automobile" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gal-item gal-item--wide reveal reveal-delay-2">
+      <div class="gal-img" style="aspect-ratio:16/9">
+        <img src="https://images.unsplash.com/photo-1547245324-d777c6f05e80?w=900&q=80&auto=format&fit=crop" alt="Showroom panorama" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gal-item reveal reveal-delay-3">
+      <div class="gal-img" style="aspect-ratio:4/3">
+        <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?w=600&q=80&auto=format&fit=crop" alt="Dashboard detail" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gal-item reveal reveal-delay-3">
+      <div class="gal-img" style="aspect-ratio:4/3">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop" alt="Performance SUV" loading="lazy">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FINANCING -->
+<section id="financing">
+  <div class="financing-copy">
+    <p class="section-eyebrow reveal">Finance Your Dream</p>
+    <h2 class="section-title reveal reveal-delay-1">Tailored<br>Financing.</h2>
+    <p class="section-lead reveal reveal-delay-2">We work with a network of premium lenders to structure a financing plan that suits your situation. Competitive rates, flexible terms, and a process that respects your time.</p>
+    <div class="fin-features reveal reveal-delay-3">
+      <div class="fin-feature">
+        <div class="fin-feature-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+        </div>
+        <div class="fin-feature-text">
+          <h4>Competitive Rates</h4>
+          <p>We source financing from multiple premium lenders to get you the best available rate.</p>
+        </div>
+      </div>
+      <div class="fin-feature">
+        <div class="fin-feature-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+        </div>
+        <div class="fin-feature-text">
+          <h4>Flexible Terms</h4>
+          <p>Choose terms that align with your financial goals — from 24 to 84 months.</p>
+        </div>
+      </div>
+      <div class="fin-feature">
+        <div class="fin-feature-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="fin-feature-text">
+          <h4>Fast Approvals</h4>
+          <p>Our streamlined process means decisions in hours, not days.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal reveal-delay-2">
+    <div class="form-card">
+      <h3>Finance Inquiry</h3>
+      <form id="financeForm" onsubmit="handleForm(event,'Finance Inquiry','Financing functionality is disabled in this demo version. A live financing inquiry system can be connected using a backend service.')">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+1 (555) 000-0000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Vehicle of Interest</label>
+          <input type="text" placeholder="e.g. 2023 Porsche 911 GT3">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Budget Range</label>
+            <select>
+              <option value="">Select range</option>
+              <option>Under $50,000</option>
+              <option>$50,000 – $100,000</option>
+              <option>$100,000 – $200,000</option>
+              <option>$200,000+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Payment</label>
+            <select>
+              <option value="">Select option</option>
+              <option>Finance</option>
+              <option>Lease</option>
+              <option>Cash Purchase</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">Submit Finance Inquiry</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- INQUIRY -->
+<section id="inquiry">
+  <div class="inquiry-inner">
+    <p class="section-eyebrow reveal">Talk To Us</p>
+    <h2 class="section-title reveal reveal-delay-1">Vehicle Inquiry.</h2>
+    <p class="section-lead reveal reveal-delay-2">Have a specific vehicle in mind? Our team will source it or match you with the closest option in our collection.</p>
+    <form class="inquiry-form reveal reveal-delay-3" onsubmit="handleForm(event,'Vehicle Inquiry','Vehicle inquiry functionality is disabled in this demo version. A live inquiry system can be connected using a backend service.')">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Full name" required>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" placeholder="+1 (555) 000-0000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Vehicle of Interest</label>
+        <input type="text" placeholder="Make, model, year...">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell us more about what you're looking for..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Inquiry</button>
+    </form>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="reviews-inner">
+    <p class="section-eyebrow reveal">Customer Reviews</p>
+    <h2 class="section-title reveal reveal-delay-1">Share Your<br>Experience.</h2>
+    <p class="section-lead reveal reveal-delay-2">Have you purchased or inquired through CAR DEALER? We'd love to hear about your experience.</p>
+    <p class="review-note reveal reveal-delay-2">Reviews are stored securely and moderated before publication.</p>
+    <form class="reveal reveal-delay-3" onsubmit="handleForm(event,'Review Submitted','Review functionality is disabled in this demo version. A backend database is required to store customer reviews.')">
+      <div class="star-select" id="starSelect">
+        <button type="button" class="star-btn" data-val="1" onclick="setRating(1)">&#9733;</button>
+        <button type="button" class="star-btn" data-val="2" onclick="setRating(2)">&#9733;</button>
+        <button type="button" class="star-btn" data-val="3" onclick="setRating(3)">&#9733;</button>
+        <button type="button" class="star-btn" data-val="4" onclick="setRating(4)">&#9733;</button>
+        <button type="button" class="star-btn" data-val="5" onclick="setRating(5)">&#9733;</button>
+      </div>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name" required style="background:var(--charcoal);border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px 16px;width:100%;outline:none;font-size:0.9rem;color:var(--white);transition:border-color var(--transition),box-shadow var(--transition);">
+      </div>
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea placeholder="Share your experience..." style="width:100%;padding:12px 16px;background:var(--charcoal);border:1px solid var(--glass-border);border-radius:var(--radius);font-size:0.9rem;color:var(--white);outline:none;resize:vertical;min-height:120px;font-family:var(--font-body);"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Submit Review</button>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-copy">
+    <p class="section-eyebrow reveal">Get In Touch</p>
+    <h2 class="section-title reveal reveal-delay-1">Visit Our<br>Showroom.</h2>
+    <p class="section-lead reveal reveal-delay-2">Our team is available six days a week to answer questions, arrange viewings, and discuss financing options.</p>
+    <div class="contact-info reveal reveal-delay-3">
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Phone</div>
+          <div class="contact-item-value">+1 (555) 900-2400</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-value">hello@apexmotors.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Showroom</div>
+          <div class="contact-item-value">4820 Motor Mile Blvd, Suite 100<br>Los Angeles, CA 90048</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Business Hours</div>
+          <div class="contact-item-value">Mon–Fri: 9am – 7pm<br>Saturday: 10am – 5pm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-form reveal reveal-delay-2">
+    <div class="form-card">
+      <h3>Send a Message</h3>
+      <form onsubmit="handleForm(event,'Message Received','Contact functionality is disabled in this demo version. A backend service is required to receive messages.')">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea style="width:100%;padding:12px 16px;background:var(--gunmetal);border:1px solid var(--glass-border);border-radius:var(--radius);font-size:0.9rem;color:var(--white);outline:none;resize:vertical;min-height:120px;font-family:var(--font-body);transition:border-color var(--transition),box-shadow var(--transition);" placeholder="How can we help?"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-logo">APEX <span>MOTORS</span></span>
+      <p>Curating an exceptional collection of luxury and performance vehicles since 2009. Where every drive begins with a decision you'll be proud of.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Inventory</h4>
+      <ul>
+        <li><a href="#featured">Sports Cars</a></li>
+        <li><a href="#featured">Luxury Sedans</a></li>
+        <li><a href="#featured">Premium SUVs</a></li>
+        <li><a href="#featured">Electric Vehicles</a></li>
+        <li><a href="#featured">Performance Cars</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#financing">Financing</a></li>
+        <li><a href="#inquiry">Vehicle Inquiry</a></li>
+        <li><a href="#contact">Concierge</a></li>
+        <li><a href="#contact">Trade-In</a></li>
+        <li><a href="#contact">Delivery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#gallery">Showroom</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Careers</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 CAR DEALER. All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ============ LOADER ============ */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 1600);
+  });
+
+  /* ============ MOUSE GLOW ============ */
+  const glow = document.getElementById('glow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  /* ============ NAVBAR ============ */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  /* ============ MOBILE MENU ============ */
+  function toggleMenu() {
+    const ham = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileMenu');
+    ham.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  /* ============ ACTIVE NAV LINKS ============ */
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navAnchors.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => observer.observe(s));
+
+  /* ============ SCROLL REVEAL ============ */
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* ============ MODAL ============ */
+  function openModal(title, msg) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-msg').textContent = msg;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  /* ============ FORM HANDLER ============ */
+  function handleForm(e, title, msg) {
+    e.preventDefault();
+    openModal(title, msg);
+  }
+
+  /* ============ STAR RATING ============ */
+  function setRating(val) {
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.val) <= val);
+    });
+  }
+
+  /* ============ FORM FOCUS STYLING ============ */
+  document.querySelectorAll('textarea').forEach(ta => {
+    ta.addEventListener('focus', () => {
+      ta.style.borderColor = 'var(--blue)';
+      ta.style.boxShadow = '0 0 0 3px var(--blue-dim)';
+    });
+    ta.addEventListener('blur', () => {
+      ta.style.borderColor = '';
+      ta.style.boxShadow = '';
+    });
+  });
+</script>
+</body>
+</html>
