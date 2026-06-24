@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dDENTIST — Modern Dental Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1e35;
+    --navy-mid: #1a2e4a;
+    --navy-light: #253d5e;
+    --teal: #3a8c8c;
+    --teal-light: #4da6a6;
+    --teal-muted: #5bbfbf22;
+    --mint: #e8f5f5;
+    --silver: #e8ecf0;
+    --silver-mid: #cdd4db;
+    --white: #ffffff;
+    --off-white: #f7f9fb;
+    --text-primary: #0f1e35;
+    --text-secondary: #4a5568;
+    --text-muted: #8896a8;
+    --gradient-hero: linear-gradient(135deg, #0f1e35 0%, #1a3a5c 50%, #1e4a5a 100%);
+    --gradient-section: linear-gradient(180deg, #f7f9fb 0%, #eef2f7 100%);
+    --shadow-sm: 0 2px 12px rgba(15,30,53,0.07);
+    --shadow-md: 0 8px 32px rgba(15,30,53,0.12);
+    --shadow-lg: 0 20px 60px rgba(15,30,53,0.18);
+    --shadow-teal: 0 8px 32px rgba(58,140,140,0.2);
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 40px;
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    color: var(--text-primary);
+    background: var(--white);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── LOADER ─────────────────────────────────────────── */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: var(--white); letter-spacing: 0.04em;
+  }
+  .loader-logo span { color: var(--teal-light); }
+  .loader-bar {
+    width: 160px; height: 2px; background: rgba(255,255,255,0.15);
+    border-radius: 99px; overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%; background: var(--teal-light);
+    border-radius: 99px; width: 0;
+    animation: loadFill 1.2s ease forwards;
+  }
+  @keyframes loadFill { to { width: 100%; } }
+
+  /* ─── MOUSE GLOW ─────────────────────────────────────── */
+  #mouse-glow {
+    position: fixed; pointer-events: none; z-index: 0;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(58,140,140,0.07) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: left 0.15s ease, top 0.15s ease;
+  }
+
+  /* ─── NAVBAR ─────────────────────────────────────────── */
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 20px 0;
+    transition: var(--transition);
+  }
+  #navbar.scrolled {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-sm);
+    padding: 12px 0;
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem; color: var(--white);
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: var(--transition);
+  }
+  .nav-logo span { color: var(--teal-light); }
+  #navbar.scrolled .nav-logo { color: var(--navy); }
+  .nav-links {
+    display: flex; align-items: center; gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.85);
+    transition: var(--transition); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1.5px;
+    background: var(--teal-light);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+  .nav-links a:hover { color: var(--white); }
+  #navbar.scrolled .nav-links a { color: var(--text-secondary); }
+  #navbar.scrolled .nav-links a:hover { color: var(--navy); }
+  .nav-cta {
+    background: var(--teal); color: var(--white) !important;
+    padding: 10px 22px; border-radius: 99px;
+    font-weight: 500 !important;
+    transition: var(--transition) !important;
+  }
+  .nav-cta:hover { background: var(--teal-light) !important; transform: translateY(-1px); }
+  .nav-cta::after { display: none !important; }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 6px; background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 1.5px;
+    background: var(--white);
+    transition: var(--transition);
+  }
+  #navbar.scrolled .hamburger span { background: var(--navy); }
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; z-index: 999;
+    background: var(--navy);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 36px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: var(--white);
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: var(--transition);
+  }
+  .mobile-menu a:hover { color: var(--teal-light); }
+  .mobile-close {
+    position: absolute; top: 24px; right: 40px;
+    background: none; border: none; cursor: pointer;
+    font-size: 1.8rem; color: var(--white); line-height: 1;
+  }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  #hero {
+    min-height: 100vh; position: relative;
+    background: var(--gradient-hero);
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg-image {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1920&q=80');
+    background-size: cover; background-position: center;
+    opacity: 0.22;
+    z-index: 0;
+  }
+  .hero-grid-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .hero-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+    position: relative; z-index: 2; width: 100%;
+    padding-top: 100px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--teal-light);
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow-line {
+    width: 32px; height: 1px; background: var(--teal-light);
+  }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1; color: var(--white);
+    margin-bottom: 24px; letter-spacing: -0.02em;
+  }
+  .hero-title em { font-style: italic; color: var(--teal-light); }
+  .hero-sub {
+    font-size: 1.05rem; color: rgba(255,255,255,0.7);
+    line-height: 1.75; max-width: 420px; margin-bottom: 44px;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--teal); color: var(--white);
+    padding: 14px 30px; border-radius: 99px;
+    font-weight: 500; font-size: 0.9rem; letter-spacing: 0.02em;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: var(--transition); box-shadow: var(--shadow-teal);
+    font-family: inherit;
+  }
+  .btn-primary:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(58,140,140,0.35); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; color: var(--white);
+    padding: 14px 30px; border-radius: 99px;
+    font-weight: 500; font-size: 0.9rem; letter-spacing: 0.02em;
+    text-decoration: none; border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer; transition: var(--transition);
+    font-family: inherit;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+  .hero-image-wrap {
+    position: relative;
+  }
+  .hero-img-frame {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+  .hero-img-frame img {
+    width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.03);
+    transition: transform 8s ease;
+  }
+  .hero-img-frame:hover img { transform: scale(1); }
+  .hero-badge {
+    position: absolute; bottom: -20px; left: -24px;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-md);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .hero-badge-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--mint);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .hero-badge-icon svg { width: 22px; height: 22px; }
+  .hero-badge-text { line-height: 1.3; }
+  .hero-badge-text strong { display: block; font-size: 0.85rem; color: var(--navy); font-weight: 600; }
+  .hero-badge-text span { font-size: 0.75rem; color: var(--text-muted); }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%); z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .hero-scroll span { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* ─── SECTION UTILITIES ─────────────────────────────── */
+  section { position: relative; }
+  .section-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 16px;
+  }
+  .section-eyebrow::before {
+    content: ''; display: block;
+    width: 24px; height: 1px; background: var(--teal);
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    line-height: 1.15; letter-spacing: -0.02em;
+    color: var(--navy);
+  }
+  .section-title em { font-style: italic; color: var(--teal); }
+  .section-body {
+    font-size: 1rem; color: var(--text-secondary);
+    line-height: 1.8; font-weight: 300;
+    max-width: 520px;
+  }
+
+  /* ─── ABOUT ─────────────────────────────────────────── */
+  #about { padding: 120px 0; background: var(--white); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .about-images {
+    position: relative; height: 580px;
+  }
+  .about-img-main {
+    position: absolute; top: 0; left: 0;
+    width: 75%; aspect-ratio: 3/4;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .about-img-main img { width: 100%; height: 100%; object-fit: cover; }
+  .about-img-accent {
+    position: absolute; bottom: 0; right: 0;
+    width: 55%; aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 6px solid var(--white);
+  }
+  .about-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+  .about-content { }
+  .about-features {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-top: 44px;
+  }
+  .feature-card {
+    background: var(--off-white);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    border: 1px solid var(--silver);
+    transition: var(--transition);
+  }
+  .feature-card:hover { background: var(--mint); border-color: var(--teal-light); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+  .feature-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--teal-muted);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .feature-icon svg { width: 20px; height: 20px; stroke: var(--teal); }
+  .feature-card h4 { font-size: 0.88rem; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .feature-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── SERVICES ──────────────────────────────────────── */
+  #services { padding: 120px 0; background: var(--gradient-section); }
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 60px; gap: 40px;
+  }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .service-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    cursor: default;
+  }
+  .service-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-md); }
+  .service-img {
+    aspect-ratio: 16/10; overflow: hidden;
+    position: relative;
+  }
+  .service-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .service-card:hover .service-img img { transform: scale(1.06); }
+  .service-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(15,30,53,0.5) 0%, transparent 60%);
+  }
+  .service-body { padding: 24px; }
+  .service-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--teal); background: var(--mint);
+    padding: 4px 10px; border-radius: 99px; margin-bottom: 10px;
+  }
+  .service-body h3 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); margin-bottom: 8px; line-height: 1.2; }
+  .service-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ─── CLINIC SHOWCASE ────────────────────────────────── */
+  #clinic { padding: 120px 0; background: var(--white); overflow: hidden; }
+  .clinic-header { margin-bottom: 60px; }
+  .clinic-mosaic {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 260px 260px;
+    gap: 16px;
+  }
+  .mosaic-item {
+    border-radius: var(--radius-md); overflow: hidden;
+    position: relative;
+  }
+  .mosaic-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .mosaic-item:hover img { transform: scale(1.05); }
+  .mosaic-item-1 { grid-column: 1; grid-row: 1 / 3; }
+  .mosaic-item-2 { grid-column: 2; grid-row: 1; }
+  .mosaic-item-3 { grid-column: 3; grid-row: 1; }
+  .mosaic-item-4 { grid-column: 2 / 4; grid-row: 2; }
+  .mosaic-label {
+    position: absolute; bottom: 16px; left: 16px;
+    background: rgba(15,30,53,0.7);
+    backdrop-filter: blur(10px);
+    color: var(--white);
+    font-size: 0.75rem; font-weight: 500;
+    padding: 6px 12px; border-radius: 99px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── TEAM ────────────────────────────────────────────── */
+  #team { padding: 120px 0; background: var(--gradient-section); }
+  .team-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 28px; margin-top: 60px;
+  }
+  .team-card {
+    background: var(--white); border-radius: var(--radius-lg);
+    overflow: hidden; box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+  .team-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .team-photo {
+    aspect-ratio: 3/4; overflow: hidden; position: relative;
+  }
+  .team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.6s ease; }
+  .team-card:hover .team-photo img { transform: scale(1.04); }
+  .team-info { padding: 20px; }
+  .team-info h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 4px; }
+  .team-specialty {
+    font-size: 0.78rem; color: var(--teal); font-weight: 500;
+    letter-spacing: 0.04em; margin-bottom: 10px;
+  }
+  .team-bio { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ─── APPOINTMENT ──────────────────────────────────────── */
+  #appointments { padding: 120px 0; background: var(--navy); position: relative; overflow: hidden; }
+  .appt-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=1920&q=80');
+    background-size: cover; background-position: center;
+    opacity: 0.06;
+  }
+  .appt-grid {
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 80px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .appt-left .section-title { color: var(--white); }
+  .appt-left .section-eyebrow { color: var(--teal-light); }
+  .appt-left .section-eyebrow::before { background: var(--teal-light); }
+  .appt-left .section-body { color: rgba(255,255,255,0.6); max-width: 380px; margin-top: 20px; }
+  .appt-info-items { margin-top: 44px; display: flex; flex-direction: column; gap: 20px; }
+  .appt-info-item { display: flex; gap: 16px; align-items: flex-start; }
+  .appt-info-icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: rgba(58,140,140,0.2); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .appt-info-icon svg { width: 18px; height: 18px; stroke: var(--teal-light); }
+  .appt-info-text strong { display: block; font-size: 0.85rem; color: var(--white); margin-bottom: 2px; }
+  .appt-info-text span { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  .appt-form-wrap {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 44px;
+    box-shadow: var(--shadow-lg);
+  }
+  .appt-form-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 28px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { font-size: 0.78rem; font-weight: 600; color: var(--navy); letter-spacing: 0.04em; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 12px 16px;
+    border: 1.5px solid var(--silver);
+    border-radius: var(--radius-sm);
+    font-family: inherit; font-size: 0.88rem; color: var(--text-primary);
+    background: var(--off-white);
+    transition: var(--transition); outline: none;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--teal); background: var(--white);
+    box-shadow: 0 0 0 3px rgba(58,140,140,0.12);
+  }
+  .form-group textarea { min-height: 100px; resize: vertical; }
+  .form-submit {
+    margin-top: 20px; width: 100%;
+    padding: 14px; border-radius: 99px;
+    background: var(--teal); color: var(--white);
+    font-family: inherit; font-size: 0.9rem; font-weight: 600;
+    border: none; cursor: pointer; transition: var(--transition);
+    letter-spacing: 0.02em;
+  }
+  .form-submit:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: var(--shadow-teal); }
+
+  /* ─── REVIEWS ──────────────────────────────────────── */
+  #reviews { padding: 120px 0; background: var(--white); }
+  .reviews-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 80px; align-items: center; margin-top: 60px;
+  }
+  .review-form-wrap {
+    background: var(--off-white); border: 1.5px solid var(--silver);
+    border-radius: var(--radius-lg); padding: 36px;
+  }
+  .review-form-wrap h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 8px; }
+  .review-form-wrap p { font-size: 0.83rem; color: var(--text-muted); margin-bottom: 24px; }
+  .star-group { display: flex; gap: 8px; margin-bottom: 16px; }
+  .star-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1.5rem; color: var(--silver-mid);
+    transition: var(--transition); padding: 2px;
+  }
+  .star-btn.active, .star-btn:hover { color: #f0b429; }
+  .review-empty-state {
+    background: var(--gradient-section);
+    border-radius: var(--radius-lg); padding: 60px 40px;
+    text-align: center;
+    border: 1.5px dashed var(--silver-mid);
+  }
+  .review-empty-state h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 12px; }
+  .review-empty-state p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; max-width: 360px; margin: 0 auto; }
+  .review-empty-icon { margin-bottom: 20px; }
+  .review-empty-icon svg { width: 48px; height: 48px; stroke: var(--silver-mid); }
+
+  /* ─── CONTACT ────────────────────────────────────────── */
+  #contact { padding: 120px 0; background: var(--gradient-section); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr;
+    gap: 80px; align-items: start;
+  }
+  .contact-form-wrap {
+    background: var(--white); border-radius: var(--radius-lg);
+    padding: 44px; box-shadow: var(--shadow-md);
+  }
+  .contact-form-wrap h3 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 24px; }
+  .contact-info { padding-top: 16px; }
+  .contact-info-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 8px; }
+  .contact-info-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.7; }
+  .contact-items { display: flex; flex-direction: column; gap: 24px; }
+  .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+  .contact-item-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--mint); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contact-item-icon svg { width: 20px; height: 20px; stroke: var(--teal); }
+  .contact-item-text strong { display: block; font-size: 0.85rem; color: var(--navy); margin-bottom: 2px; }
+  .contact-item-text span { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+  .hours-table { margin-top: 36px; }
+  .hours-table h4 { font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 14px; letter-spacing: 0.04em; }
+  .hours-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--silver); }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-row span { font-size: 0.82rem; color: var(--text-secondary); }
+  .hours-row span.open { color: var(--teal); font-weight: 500; }
+
+  /* ─── FOOTER ─────────────────────────────────────────── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,0.6);
+    padding: 60px 0 30px;
+  }
+  .footer-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 40px;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px; margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: 16px; }
+  .footer-logo span { color: var(--teal-light); }
+  .footer-tagline { font-size: 0.85rem; line-height: 1.7; max-width: 260px; }
+  .footer-col h5 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { font-size: 0.85rem; color: rgba(255,255,255,0.6); text-decoration: none; transition: var(--transition); }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom p { font-size: 0.78rem; }
+
+  /* ─── MODAL ──────────────────────────────────────────── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9000;
+    background: rgba(15,30,53,0.7);
+    backdrop-filter: blur(6px);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 48px 40px;
+    max-width: 480px; width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-icon {
+    width: 64px; height: 64px; border-radius: 20px;
+    background: var(--mint);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .modal-icon svg { width: 28px; height: 28px; stroke: var(--teal); }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 14px; }
+  .modal-body { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 28px; }
+  .modal-close-btn {
+    background: var(--teal); color: var(--white);
+    padding: 12px 32px; border-radius: 99px;
+    border: none; cursor: pointer; font-family: inherit;
+    font-size: 0.88rem; font-weight: 600; transition: var(--transition);
+  }
+  .modal-close-btn:hover { background: var(--teal-light); }
+
+  /* ─── ANIMATIONS ─────────────────────────────────────── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 48px; padding-top: 120px; }
+    .hero-image-wrap { display: none; }
+    .about-grid, .appt-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .about-images { height: 320px; display: none; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .clinic-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .mosaic-item-1 { grid-column: 1 / -1; grid-row: 1; aspect-ratio: 16/7; }
+    .mosaic-item-4 { grid-column: 1 / -1; }
+    .services-header { flex-direction: column; align-items: flex-start; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .nav-inner { padding: 0 24px; }
+    .section-inner { padding: 0 24px; }
+    .hero-inner { padding: 0 24px; padding-top: 100px; }
+    section { }
+    #hero, #about, #services, #clinic, #team, #appointments, #reviews, #contact { padding: 80px 0; }
+  }
+  @media (max-width: 600px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .appt-form-wrap, .contact-form-wrap { padding: 28px 20px; }
+    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .clinic-mosaic { grid-template-columns: 1fr; }
+    .mosaic-item-4 { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">dentist<span>.</span></div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- MOUSE GLOW -->
+<div id="mouse-glow"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+      </svg>
+    </div>
+    <h2 class="modal-title" id="modal-title">Message Received</h2>
+    <p class="modal-body" id="modal-body">This is a demo message.</p>
+    <button class="modal-close-btn" onclick="closeModal()">Got it</button>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">&times;</button>
+  <a href="#hero" onclick="closeMobileMenu()">Home</a>
+  <a href="#services" onclick="closeMobileMenu()">Services</a>
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#team" onclick="closeMobileMenu()">Team</a>
+  <a href="#appointments" onclick="closeMobileMenu()">Appointments</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">dentist<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#appointments">Appointments</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#appointments" class="nav-cta">Book Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-image"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        Premium Dental Care
+      </div>
+      <h1 class="hero-title">Healthy Smiles.<br><em>Modern Care.</em></h1>
+      <p class="hero-sub">dentist Dental combines clinical excellence with a patient experience designed around your comfort. Every visit, every smile, crafted with precision and care.</p>
+      <div class="hero-actions">
+        <a href="#appointments" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Book Appointment
+        </a>
+        <a href="#services" class="btn-secondary">Explore Services</a>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <div class="hero-img-frame">
+        <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&q=85" alt="Modern dental clinic" loading="eager">
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/></svg>
+        </div>
+        <div class="hero-badge-text">
+          <strong>Advanced Technology</strong>
+          <span>Digital X-ray &amp; 3D Imaging</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-images reveal">
+        <div class="about-img-main">
+          <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=700&q=80" alt="Dentist with patient" loading="lazy">
+        </div>
+        <div class="about-img-accent">
+          <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=500&q=80" alt="Dental equipment" loading="lazy">
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="section-eyebrow reveal">Our Philosophy</div>
+        <h2 class="section-title reveal reveal-delay-1">Dentistry as it<br><em>should feel.</em></h2>
+        <p class="section-body reveal reveal-delay-2" style="margin-top:20px;">
+          At dentist Dental, we believe exceptional dental care begins long before the treatment chair. Our clinic is designed from the ground up to feel calming, professional, and entirely patient-centred — because your comfort is our clinical priority.
+        </p>
+        <div class="about-features">
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            </div>
+            <h4>Modern Technology</h4>
+            <p>Digital X-rays, 3D cone beam imaging, and same-day restorations.</p>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h4>Experienced Care</h4>
+            <p>A specialist team across general, cosmetic, and restorative dentistry.</p>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h4>Comfortable Environment</h4>
+            <p>Thoughtfully designed spaces built to ease dental anxiety.</p>
+          </div>
+          <div class="feature-card reveal reveal-delay-4">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h4>Personalised Treatment</h4>
+            <p>Every care plan is tailored to your individual dental health goals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="services-header">
+      <div>
+        <div class="section-eyebrow reveal">What We Offer</div>
+        <h2 class="section-title reveal reveal-delay-1">Complete care<br><em>under one roof.</em></h2>
+      </div>
+      <p class="section-body reveal" style="text-align:right; max-width:340px;">From your first check-up to a complete smile transformation, dentist covers every aspect of dental health.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-img">
+          <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=600&q=80" alt="General Dentistry" loading="lazy">
+          <div class="service-img-overlay"></div>
+        </div>
+        <div class="service-body">
+          <span class="service-tag">Foundation</span>
+          <h3>General Dentistry</h3>
+          <p>Comprehensive check-ups, fillings, and oral health maintenance — the foundation of a lasting smile.</p>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-img">
+          <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=600&q=80" alt="Teeth Whitening" loading="lazy">
+          <div class="service-img-overlay"></div>
+        </div>
+        <div class="service-body">
+          <span class="service-tag">Cosmetic</span>
+          <h3>Teeth Whitening</h3>
+          <p>Professional-grade whitening treatments, both in-clinic and custom take-home options.</p>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-img">
+          <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=600&q=80" alt="Dental Implants" loading="lazy">
+          <div class="service-img-overlay"></div>
+        </div>
+        <div class="service-body">
+          <span class="service-tag">Restorative</span>
+          <h3>Dental Implants</h3>
+          <p>Permanent, natural-looking tooth replacements placed with precision by our implant specialists.</p>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-img">
+          <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=600&q=80" alt="Orthodontics" loading="lazy">
+          <div class="service-img-overlay"></div>
+        </div>
+        <div class="service-body">
+          <span class="service-tag">Alignment</span>
+          <h3>Orthodontics</h3>
+          <p>Clear aligner therapy and traditional braces for straighter teeth at every age.</p>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-img">
+          <img src="https://images.unsplash.com/photo-1629909615184-74f495363b67?w=600&q=80" alt="Cosmetic Dentistry" loading="lazy">
+          <div class="service-img-overlay"></div>
+        </div>
+        <div class="service-body">
+          <span class="service-tag">Aesthetic</span>
+          <h3>Cosmetic Dentistry</h3>
+          <p>Veneers, bonding, and smile makeovers that deliver natural, life-changing results.</p>
+        </div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-img">
+          <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80" alt="Preventive Care" loading="lazy">
+          <div class="service-img-overlay"></div>
+        </div>
+        <div class="service-body">
+          <span class="service-tag">Prevention</span>
+          <h3>Preventive Care</h3>
+          <p>Hygiene appointments, sealants, and custom mouthguards to protect your long-term oral health.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLINIC SHOWCASE -->
+<section id="clinic">
+  <div class="section-inner">
+    <div class="clinic-header">
+      <div class="section-eyebrow reveal">Our Space</div>
+      <h2 class="section-title reveal reveal-delay-1">Designed for<br><em>your comfort.</em></h2>
+    </div>
+    <div class="clinic-mosaic">
+      <div class="mosaic-item mosaic-item-1 reveal">
+        <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80" alt="Modern clinic reception" loading="lazy">
+        <span class="mosaic-label">Reception &amp; Lounge</span>
+      </div>
+      <div class="mosaic-item mosaic-item-2 reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&q=80" alt="Treatment room" loading="lazy">
+        <span class="mosaic-label">Treatment Room</span>
+      </div>
+      <div class="mosaic-item mosaic-item-3 reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=500&q=80" alt="Dental equipment" loading="lazy">
+        <span class="mosaic-label">Advanced Equipment</span>
+      </div>
+      <div class="mosaic-item mosaic-item-4 reveal reveal-delay-3">
+        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?w=900&q=80" alt="Consultation room" loading="lazy">
+        <span class="mosaic-label">Consultation Suites</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-inner">
+    <div>
+      <div class="section-eyebrow reveal">The Specialists</div>
+      <h2 class="section-title reveal reveal-delay-1">The people behind<br><em>your smile.</em></h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&q=80" alt="Dr. Sarah Mitchell" loading="lazy">
+        </div>
+        <div class="team-info">
+          <h3>Dr. Sarah Mitchell</h3>
+          <div class="team-specialty">Principal Dentist &amp; Implantologist</div>
+          <p class="team-bio">Specialising in restorative dentistry and complex implant cases, Dr. Mitchell brings over a decade of clinical excellence to every patient interaction.</p>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-1">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&q=80" alt="Dr. James Okafor" loading="lazy">
+        </div>
+        <div class="team-info">
+          <h3>Dr. James Okafor</h3>
+          <div class="team-specialty">Orthodontist</div>
+          <p class="team-bio">Dr. Okafor is our alignment specialist, combining traditional orthodontics with modern clear aligner systems for patients of all ages.</p>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&q=80" alt="Dr. Priya Sharma" loading="lazy">
+        </div>
+        <div class="team-info">
+          <h3>Dr. Priya Sharma</h3>
+          <div class="team-specialty">Cosmetic Dentist</div>
+          <p class="team-bio">With a background in aesthetic dentistry, Dr. Sharma specialises in smile design, veneers, and conservative cosmetic treatments.</p>
+        </div>
+      </div>
+      <div class="team-card reveal reveal-delay-3">
+        <div class="team-photo">
+          <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&q=80" alt="Dr. Tom Chen" loading="lazy">
+        </div>
+        <div class="team-info">
+          <h3>Dr. Tom Chen</h3>
+          <div class="team-specialty">Paediatric &amp; General Dentist</div>
+          <p class="team-bio">Dr. Chen creates a calm, positive dental experience for children and adults alike, with a focus on preventive care and patient education.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPOINTMENTS -->
+<section id="appointments">
+  <div class="appt-bg"></div>
+  <div class="section-inner">
+    <div class="appt-grid">
+      <div class="appt-left">
+        <div class="section-eyebrow reveal">Book a Visit</div>
+        <h2 class="section-title reveal reveal-delay-1">Your appointment,<br><em>your way.</em></h2>
+        <p class="section-body appt-left reveal reveal-delay-2">Choose your preferred time, service, and specialist. Our team will confirm your appointment within one business day.</p>
+        <div class="appt-info-items">
+          <div class="appt-info-item reveal reveal-delay-1">
+            <div class="appt-info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.29h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.09 6.09l1.71-1.71a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="appt-info-text">
+              <strong>+44 (0) 20 0000 0000</strong>
+              <span>Mon – Fri, 9am – 6pm</span>
+            </div>
+          </div>
+          <div class="appt-info-item reveal reveal-delay-2">
+            <div class="appt-info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="appt-info-text">
+              <strong>hello@dentistdental.co.uk</strong>
+              <span>We respond within 24 hours</span>
+            </div>
+          </div>
+          <div class="appt-info-item reveal reveal-delay-3">
+            <div class="appt-info-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="appt-info-text">
+              <strong>24 Harley Street, London W1G 9PD</strong>
+              <span>Nearest tube: Oxford Circus (5 min)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="appt-form-wrap reveal reveal-delay-2">
+        <h3 class="appt-form-title">Request an Appointment</h3>
+        <form id="apptForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="appt-name">Full Name</label>
+              <input type="text" id="appt-name" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group">
+              <label for="appt-phone">Phone Number</label>
+              <input type="tel" id="appt-phone" placeholder="+44 000 000 0000">
+            </div>
+            <div class="form-group">
+              <label for="appt-email">Email Address</label>
+              <input type="email" id="appt-email" placeholder="jane@email.com" required>
+            </div>
+            <div class="form-group">
+              <label for="appt-service">Preferred Service</label>
+              <select id="appt-service">
+                <option value="">Select a service</option>
+                <option>General Dentistry</option>
+                <option>Teeth Whitening</option>
+                <option>Dental Implants</option>
+                <option>Orthodontics</option>
+                <option>Cosmetic Dentistry</option>
+                <option>Preventive Care</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="appt-date">Preferred Date</label>
+              <input type="date" id="appt-date">
+            </div>
+            <div class="form-group">
+              <label for="appt-time">Preferred Time</label>
+              <select id="appt-time">
+                <option value="">Select a time</option>
+                <option>9:00 AM</option>
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>12:00 PM</option>
+                <option>2:00 PM</option>
+                <option>3:00 PM</option>
+                <option>4:00 PM</option>
+                <option>5:00 PM</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label for="appt-msg">Additional Notes</label>
+              <textarea id="appt-msg" placeholder="Any specific concerns or requests..."></textarea>
+            </div>
+          </div>
+          <button type="submit" class="form-submit">Request Appointment</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Patient Reviews</div>
+    <h2 class="section-title reveal reveal-delay-1">Share your<br><em>experience.</em></h2>
+    <div class="reviews-grid">
+      <div class="review-form-wrap reveal reveal-delay-1">
+        <h3>Leave a Review</h3>
+        <p>Your feedback helps other patients and helps us grow.</p>
+        <form id="reviewForm">
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="review-name">Your Name</label>
+            <input type="text" id="review-name" placeholder="Jane Smith" required>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label style="font-size:0.78rem; font-weight:600; color:var(--navy); letter-spacing:0.04em; display:block; margin-bottom:8px;">Rating</label>
+            <div class="star-group" id="starGroup">
+              <button type="button" class="star-btn" data-val="1">&#9733;</button>
+              <button type="button" class="star-btn" data-val="2">&#9733;</button>
+              <button type="button" class="star-btn" data-val="3">&#9733;</button>
+              <button type="button" class="star-btn" data-val="4">&#9733;</button>
+              <button type="button" class="star-btn" data-val="5">&#9733;</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:20px;">
+            <label for="review-text">Your Review</label>
+            <textarea id="review-text" placeholder="Tell us about your experience..." required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Submit Review</button>
+        </form>
+      </div>
+      <div class="review-empty-state reveal reveal-delay-2">
+        <div class="review-empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <h3>Reviews Coming Soon</h3>
+        <p>Patient reviews will appear here once the review system is connected to a backend database. Be the first to share your dentist experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-form-wrap reveal">
+        <h3>Send Us a Message</h3>
+        <form id="contactForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="contact-name">Your Name</label>
+              <input type="text" id="contact-name" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" placeholder="jane@email.com" required>
+            </div>
+            <div class="form-group full">
+              <label for="contact-msg">Message</label>
+              <textarea id="contact-msg" placeholder="How can we help you?" style="min-height:140px;" required></textarea>
+            </div>
+          </div>
+          <button type="submit" class="form-submit" style="margin-top:16px;">Send Message</button>
+        </form>
+      </div>
+      <div class="contact-info reveal reveal-delay-2">
+        <div class="section-eyebrow">Get in Touch</div>
+        <h3 class="contact-info-title">We're here<br><em style="font-style:italic; color:var(--teal);">to help.</em></h3>
+        <p class="contact-info-sub">Whether you have a question about a treatment, need to rearrange an appointment, or simply want to learn more — our team is happy to hear from you.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <strong>Clinic Address</strong>
+              <span>24 Harley Street<br>London, W1G 9PD<br>United Kingdom</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.29h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.09 6.09l1.71-1.71a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <strong>Phone</strong>
+              <span>+44 (0) 20 0000 0000</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="contact-item-text">
+              <strong>Email</strong>
+              <span>hello@dentistdental.co.uk</span>
+            </div>
+          </div>
+        </div>
+        <div class="hours-table">
+          <h4>Opening Hours</h4>
+          <div class="hours-row"><span>Monday – Thursday</span><span class="open">9:00 – 18:00</span></div>
+          <div class="hours-row"><span>Friday</span><span class="open">9:00 – 17:00</span></div>
+          <div class="hours-row"><span>Saturday</span><span class="open">10:00 – 14:00</span></div>
+          <div class="hours-row"><span>Sunday</span><span>Closed</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">dentist<span>.</span></div>
+        <p class="footer-tagline">Premium dental care delivered with precision, compassion, and an unwavering commitment to your comfort.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Treatments</h5>
+        <ul>
+          <li><a href="#services">General Dentistry</a></li>
+          <li><a href="#services">Teeth Whitening</a></li>
+          <li><a href="#services">Dental Implants</a></li>
+          <li><a href="#services">Orthodontics</a></li>
+          <li><a href="#services">Cosmetic Dentistry</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Clinic</h5>
+        <ul>
+          <li><a href="#about">About dentist</a></li>
+          <li><a href="#team">Our Team</a></li>
+          <li><a href="#clinic">Our Space</a></li>
+          <li><a href="#appointments">Book Appointment</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="#contact">Send a Message</a></li>
+          <li><a href="#contact">24 Harley Street</a></li>
+          <li><a href="#contact">London, W1G 9PD</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 dentist Dental. All rights reserved.</p>
+      <p style="font-size:0.75rem; opacity:0.5;">Demo site — no patient data is collected or stored.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── LOADER ──────────────────────────────────────────────
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 1400);
+  });
+
+  // ─── MOUSE GLOW ──────────────────────────────────────────
+  const glow = document.getElementById('mouse-glow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  // ─── NAVBAR ──────────────────────────────────────────────
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+    updateActiveNav();
+  });
+
+  function updateActiveNav() {
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.nav-links a');
+    let current = '';
+    sections.forEach(section => {
+      if (window.scrollY >= section.offsetTop - 160) current = section.id;
+    });
+    links.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  }
+
+  // ─── HAMBURGER ───────────────────────────────────────────
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileClose = document.getElementById('mobileClose');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  mobileClose.addEventListener('click', closeMobileMenu);
+  function closeMobileMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ─── MODAL ───────────────────────────────────────────────
+  function showModal(title, body) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').textContent = body;
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+
+  // ─── FORMS ───────────────────────────────────────────────
+  document.getElementById('apptForm').addEventListener('submit', e => {
+    e.preventDefault();
+    showModal(
+      'Demo Mode Active',
+      'Appointment booking functionality is disabled in this demo version. A live booking system can be connected using a backend service.'
+    );
+  });
+  document.getElementById('reviewForm').addEventListener('submit', e => {
+    e.preventDefault();
+    showModal(
+      'Demo Mode Active',
+      'Review functionality is disabled in this demo version. A backend database is required to store customer reviews.'
+    );
+  });
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    showModal(
+      'Demo Mode Active',
+      'Contact functionality is disabled in this demo version. A backend service is required to receive messages.'
+    );
+  });
+
+  // ─── STARS ───────────────────────────────────────────────
+  let selectedRating = 0;
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedRating = parseInt(btn.dataset.val);
+      document.querySelectorAll('.star-btn').forEach((s, i) => {
+        s.classList.toggle('active', i < selectedRating);
+      });
+    });
+    btn.addEventListener('mouseenter', () => {
+      const hoverVal = parseInt(btn.dataset.val);
+      document.querySelectorAll('.star-btn').forEach((s, i) => {
+        s.classList.toggle('active', i < hoverVal);
+      });
+    });
+  });
+  document.getElementById('starGroup').addEventListener('mouseleave', () => {
+    document.querySelectorAll('.star-btn').forEach((s, i) => {
+      s.classList.toggle('active', i < selectedRating);
+    });
+  });
+
+  // ─── SCROLL REVEAL ───────────────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ─── HERO IMAGE SUBTLE PARALLAX ─────────────────────────
+  const heroBg = document.querySelector('.hero-bg-image');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (heroBg && scrollY < window.innerHeight) {
+      heroBg.style.transform = `translateY(${scrollY * 0.2}px)`;
+    }
+  }, { passive: true });
+</script>
+</body>
+</html>
