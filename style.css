@@ -940,10 +940,12 @@ footer {
   .stat-box { flex: 1; padding: 20px; }
   .stat-num { font-size: 34px; }
 
-  .services-grid { grid-template-columns: 1fr; border-radius: var(--radius); }
-  .service-card { border-right: none; }
-  .service-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
-  .service-card:last-child { border-bottom: none; }
+  .services-grid { border-radius: var(--radius); }
+  .service-card { padding: 22px 16px; }
+  .svc-icon { width: 34px; height: 34px; margin-bottom: 14px; }
+  .svc-icon svg { width: 16px; height: 16px; }
+  .svc-title { font-size: 14px; margin-bottom: 8px; }
+  .svc-desc { font-size: 11.5px; line-height: 1.6; }
 
   .skills-wrapper { grid-template-columns: 1fr; gap: 40px; }
 
